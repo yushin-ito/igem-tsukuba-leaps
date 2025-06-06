@@ -1,0 +1,89 @@
+{
+  "error": {
+    "metadata": {
+      "title": "予期せぬエラーが発生しました。",
+      "description": "もう一度お試しいただくか、時間をおいてアクセスしてください。"
+    },
+    "reload": "再読み込みする"
+  },
+  "forbidden": {
+    "metadata": {
+      "title": "管理者権限がありません。",
+      "description": "このページにアクセスするには、管理者権限が必要です。"
+    },
+    "signout": "サインアウトする"
+  },
+  "unauthorized": {
+    "metadata": {
+      "title": "ログインしていません。",
+      "description": "このページにアクセスするには、ログインする必要があります。"
+    },
+    "back_to_login": "ログインページに戻る"
+  },
+  "not_found": {
+    "metadata": {
+      "title": "ご指定のページが見つかりません。",
+      "description": "URLが変更されたか、削除された可能性があります。"
+    },
+    "back_to_top": "トップページに戻る"
+  },
+  "top": {
+    "metadata": {
+      "title": "トップ",
+      "description": ""
+    },
+    "about_us": "私たちについて",
+    "get_started": "はじめる"
+  },
+  "auth": {
+    "email": "メールアドレス",
+    "invalid_email": "無効なメールアドレスです。",
+    "or": "または",
+    "back": "戻る",
+    "login": {
+      "metadata": {
+        "title": "ログイン",
+        "description": "アカウントにログインしてください"
+      },
+      "submit": "ログイン",
+      "login_with_provider": "{provider}でログイン",
+      "do_not_have_an_account": "アカウントをお持ちでないですか？",
+      "success": {
+        "title": "メールアドレスの確認が必要です。",
+        "description": "確認メールを送信しました。メールに記載されたリンクをクリックしてください。"
+      },
+      "error": {
+        "title": "エラーが発生しました。",
+        "description": "サインインに失敗しました。もう一度お試しください。"
+      }
+    },
+    "signup": {
+      "metadata": {
+        "title": "新規登録",
+        "description": "新しいアカウントを作成してください"
+      },
+      "submit": "新規登録",
+      "signup_with_provider": "{provider}で新規登録",
+      "already_have_an_account": "すでにアカウントをお持ちですか？",
+      "success": {
+        "title": "メールアドレスの確認が必要です。",
+        "description": "確認メールを送信しました。メールに記載されたリンクをクリックしてください。"
+      },
+      "error": {
+        "title": "エラーが発生しました。",
+        "description": "サインアップに失敗しました。もう一度お試しください。"
+      }
+    }
+  },
+  "email": {
+    "subject": "メールアドレスの認証",
+    "preview": "メールアドレスの認証を完了してください",
+    "title": "メールアドレスの認証",
+    "description": "メールアドレスの認証を受け付けました。🎉\nこの度はご利用いただき、ありがとうございます。\n本サービスをご利用いただくためには、メールアドレスの認証が必要になります。",
+    "instruction": "以下のボタンをクリックすると、メールアドレスの認証が完了します。\n必ず <strong>24時間以内</strong> に認証を完了してください。",
+    "verify": "認証する",
+    "warning": "このメールに心当たりがない場合は、誤って送信された可能性があります。何も操作せずにこのメールを削除してください。\n\n認証リンクの有効期限は24時間です。期限切れの場合は、再度認証リクエストを送信してください。",
+    "support": "お問い合わせは <link>support@{domain}</link> までご連絡ください。",
+    "footer": "© {year} <link>{name}</link>"
+  }
+}

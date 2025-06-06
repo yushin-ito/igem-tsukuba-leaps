@@ -1,0 +1,89 @@
+{
+  "error": {
+    "metadata": {
+      "title": "Something went wrong!",
+      "description": "Please try again or access the page after some time."
+    },
+    "reload": "Reload"
+  },
+  "forbidden": {
+    "metadata": {
+      "title": "403 Forbidden",
+      "description": "You are not authorized to access this page."
+    },
+    "signout": "Sign Out"
+  },
+  "unauthorized": {
+    "metadata": {
+      "title": "401 Unauthorized",
+      "description": "You are not logged in  to access this page."
+    },
+    "back_to_login": "Back to Login"
+  },
+  "not_found": {
+    "metadata": {
+      "title": "404 Not Found",
+      "description": "The URL may have been changed or the page may have been deleted."
+    },
+    "back_to_top": "Back to Top"
+  },
+  "top": {
+    "metadata": {
+      "title": "Home",
+      "description": ""
+    },
+    "about_us": "About Us",
+    "get_started": "Get Started"
+  },
+  "auth": {
+    "email": "Email",
+    "invalid_email": "Invalid email address.",
+    "or": "or",
+    "back": "Back",
+    "login": {
+      "metadata": {
+        "title": "Log In",
+        "description": "Log in to your account"
+      },
+      "submit": "Log in",
+      "login_with_provider": "Log in with {provider}",
+      "do_not_have_an_account": "Don't have an account?",
+      "success": {
+        "title": "Verify your email.",
+        "description": "We sent you a login link. Be sure to check your spam too."
+      },
+      "error": {
+        "title": "Something went wrong.",
+        "description": "Your sign in request failed. Please try again."
+      }
+    },
+    "signup": {
+      "metadata": {
+        "title": "Sign Up",
+        "description": "Create a new account"
+      },
+      "submit": "Sign up",
+      "signup_with_provider": "Sign up with {provider}",
+      "already_have_an_account": "Already have an account?",
+      "success": {
+        "title": "Verify your email.",
+        "description": "We sent you a sign up link. Be sure to check your spam too."
+      },
+      "error": {
+        "title": "Something went wrong.",
+        "description": "Your sign up request failed. Please try again."
+      }
+    }
+  },
+  "email": {
+    "subject": "Email Verification",
+    "preview": "Please complete your email verification",
+    "title": "Email Verification",
+    "description": "Your email verification has been received. 🎉\nThank you for using our service.\nTo access our services, you need to verify your email address.",
+    "instruction": "Click the button below to complete your email verification.\nPlease make sure to verify within <strong>24 hours</strong>.",
+    "verify": "Verify",
+    "warning": "If you did not request this email, it may have been sent by mistake. Please ignore and delete this email.\n\nThe verification link is valid for 24 hours. If it expires, please request verification again.",
+    "support": "For support, please contact us at <link>support@{domain}</link>.",
+    "footer": "© {year} <link>{name}</link>"
+  }
+}
