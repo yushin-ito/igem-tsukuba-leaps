@@ -50,7 +50,7 @@ const NewChatInput = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl rounded-3xl border border-input p-4 shadow-xs">
+    <div className="w-full rounded-3xl border border-input p-4 shadow-xs">
       <Label className="sr-only">{t("message")}</Label>
       <Textarea
         className="!bg-transparent min-h-0 resize-none border-none px-2 shadow-none focus-visible:ring-0"

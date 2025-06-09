@@ -109,11 +109,11 @@ const Chat = ({ roomId, messages }: ChatProps) => {
   return (
     <>
       <div className="flex-1 overflow-y-auto">
-        <div className="container max-w-4xl px-12">
+        <div className="container max-w-3xl px-12">
           <ChatContent anchor={anchor} roomId={roomId} messages={messages} />
         </div>
       </div>
-      <div className="-mt-6 container relative max-w-4xl flex-shrink-0 px-12 pb-6">
+      <div className="-mt-6 container relative max-w-3xl flex-shrink-0 px-12 pb-6">
         <div className="-top-6 pointer-events-none absolute inset-x-12 h-12 bg-gradient-to-t from-background to-transparent" />
         <AnchorButton
           target={anchor}
