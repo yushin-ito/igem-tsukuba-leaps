@@ -29,8 +29,8 @@
   },
   "top": {
     "metadata": {
-      "title": "Home",
-      "description": ""
+      "title": "Top",
+      "description": "LEAPS is an interactive web application developed to enable the design of high-performance protein sequences, even from a small amount of experimental data. It features a simple, user-friendly interface that requires no complex operations, making it accessible to anyone."
     },
     "about_us": "About Us",
     "get_started": "Get Started"
@@ -102,7 +102,7 @@
     "archaive": "Archive",
     "delete": "Delete",
     "prompt": {
-      "welcome": "Welcome to {name}.<br/><br/>This web application provides an interface for designing high-performance proteins from small datasets.",
+      "welcome": "Welcome to {name}.<br/><br/>LEAPS is an interactive web application developed to enable the design of high-performance protein sequences, even from a small amount of experimental data. It features a simple, user-friendly interface that requires no complex operations, making it accessible to anyone.",
       "overview": "The following steps will guide you through the process:<br/><br/><strong>Step 1. Dataset Upload</strong><br/>Upload a CSV file containing protein sequences and multiple experimental values for each sequence.<br/><br/><strong>Step 2. Sample Generation</strong><br/>Based on the uploaded sequences, new sequences will be generated through shuffling or random mutation.<br/><br/><strong>Step 3. Predictor Training</strong><br/>Train a prediction model for each experimental value.<br/><br/><strong>Step 4. Screening</strong><br/>Evaluate the generated sequences using predicted values and likelihoods from the generative model, and filter them based on thresholds.<br/><br/><strong>Step 5. Generative Model Fine-tuning</strong><br/>Fine-tune the generative model using the high-quality sequences selected through screening.<br/><br/>By repeating these steps, the system aims to generate optimal protein sequences tailored to your objectives.",
       "step1": {
         "instruction": "<strong>Step 1: Dataset Upload</strong><br/>Please upload a CSV file.<br/><br/>Use the following format:<br/><code>sequence,value1,value2,value3</code><br/>Once the upload is complete, the next step will begin automatically."
