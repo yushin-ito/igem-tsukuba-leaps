@@ -75,6 +75,125 @@
       }
     }
   },
+  "chat": {
+    "metadata": {
+      "title": "Chat",
+      "description": ""
+    },
+    "search_chat": "Search Chat",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last_week": "Last Week",
+    "earlier": "Earlier",
+    "settings": "Settings",
+    "terms": "Terms",
+    "faq": "FAQ",
+    "logOut": "Log Out",
+    "message": "Message",
+    "welcome": "Welcome to {name}",
+    "start": "Start Chat",
+    "placeholder": "Type your message here...",
+    "upload": "Upload",
+    "template": "Template",
+    "new_chat": "New Chat",
+    "untitled_chat": "Untitled Chat",
+    "share": "Share",
+    "rename": "Rename",
+    "archaive": "Archive",
+    "delete": "Delete",
+    "prompt": {
+      "welcome": "Welcome to {name}.<br/><br/>This web application provides an interface for designing high-performance proteins from small datasets.",
+      "overview": "The following steps will guide you through the process:<br/><br/><strong>Step 1. Dataset Upload</strong><br/>Upload a CSV file containing protein sequences and multiple experimental values for each sequence.<br/><br/><strong>Step 2. Sample Generation</strong><br/>Based on the uploaded sequences, new sequences will be generated through shuffling or random mutation.<br/><br/><strong>Step 3. Predictor Training</strong><br/>Train a prediction model for each experimental value.<br/><br/><strong>Step 4. Screening</strong><br/>Evaluate the generated sequences using predicted values and likelihoods from the generative model, and filter them based on thresholds.<br/><br/><strong>Step 5. Generative Model Fine-tuning</strong><br/>Fine-tune the generative model using the high-quality sequences selected through screening.<br/><br/>By repeating these steps, the system aims to generate optimal protein sequences tailored to your objectives.",
+      "step1": {
+        "instruction": "<strong>Step 1: Dataset Upload</strong><br/>Please upload a CSV file.<br/><br/>Use the following format:<br/><code>sequence,value1,value2,value3</code><br/>Once the upload is complete, the next step will begin automatically."
+      }
+    },
+    "file": "File",
+    "copy": "Copy",
+    "copied": "Copied",
+    "dropzone": {
+      "title": "Upload File",
+      "description": "Drop your file here to upload."
+    },
+    "empty_placeholder": {
+      "title": "No search results found",
+      "description": "Please try searching with different keywords."
+    },
+    "dialog": {
+      "search": {
+        "title": "Search Chat",
+        "description": "Enter keywords to search in the chat."
+      },
+      "rename": {
+        "title": "Rename Chat",
+        "description": "Enter a new name for the chat."
+      },
+      "share": {
+        "title": "Share Chat",
+        "description": "Copy the link to share the chat."
+      },
+      "delete": {
+        "title": "Are you sure you want to delete this post?",
+        "description": "If you delete this post, it will be permanently removed and cannot be recovered."
+      }
+    },
+    "link": "Link",
+    "name": "Name",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "save": "Save",
+    "too_short": "Name must be at least 3 characters long.",
+    "too_long": "Name must be 64 characters or less.",
+    "success": {
+      "copy": "Copied to clipboard.",
+      "rename": {
+        "title": "Chat Renamed",
+        "description": "The chat has been successfully renamed."
+      },
+      "delete": {
+        "title": "Chat Deleted",
+        "description": "The chat has been successfully deleted."
+      }
+    },
+    "error": {
+      "create": {
+        "title": "Something went wrong.",
+        "description": "Your room create failed. Please try again." 
+      },
+      "send": {
+        "title": "Something went wrong.",
+        "description": "Your message send failed. Please try again." 
+      },
+      "copy": {
+        "title": "Something went wrong.",
+        "description": "Your code copy failed. Please try again." 
+      },
+      "rename": {
+        "title": "Something went wrong.",
+        "description": "Your chat rename failed. Please try again."
+      },
+      "delete": {
+        "title": "Something went wrong.",
+        "description": "Your chat delete failed. Please try again."
+      },
+      "upload": {
+        "title": "Something went wrong.",
+        "description": "Your file upload failed. Please try again."
+      },
+      "unsported": {
+        "title": "Something went wrong.",
+        "description": "Unsupported file format. Only {file} is supported."
+      },
+      "too_small": {
+        "title": "Something went wrong.",
+        "description": "The file is too small. Please choose a file larger than {size}."
+      },
+      "too_large": {
+        "title": "Something went wrong.",
+        "description": "The file is too large. Please choose a file smaller than {size}."
+      }
+    }
+  },
   "email": {
     "subject": "Email Verification",
     "preview": "Please complete your email verification",

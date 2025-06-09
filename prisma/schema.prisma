@@ -48,6 +48,7 @@ model User {
   updatedAt     DateTime  @default(now()) @map("updated_at")
   accounts      Account[]
   sessions      Session[]
+  rooms         Room[]
 
   @@map("users")
 }
@@ -59,4 +60,36 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  title     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@map("rooms")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  roomId    String   @map("room_id")
+  role      Role
+  text      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+enum Role {
+  USER
+  SYSTEM
 }

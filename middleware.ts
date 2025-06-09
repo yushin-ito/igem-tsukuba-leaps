@@ -13,7 +13,6 @@ export default auth((req) => {
 
   if (isAuthPage) {
     if (isAuth) {
-      console.log("did");
       return NextResponse.redirect(new URL("/chat", req.url));
     }
 

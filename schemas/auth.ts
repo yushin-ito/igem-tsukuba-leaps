@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const loginSchema = z.object({
-  email: z.string().email({ message: "invalid_email" }),
+  email: z.email({ message: "invalid_email" }),
 });
 
 export const signupSchema = z.object({
-  email: z.string().email({ message: "invalid_email" }),
+  email: z.email({ message: "invalid_email" }),
 });

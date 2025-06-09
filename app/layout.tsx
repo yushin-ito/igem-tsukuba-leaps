@@ -14,6 +14,7 @@ import TailwindIndicator from "@/components/tailwind-indicator";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { SWRConfig } from "swr";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -86,9 +87,11 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           `${inter.variable} ${noto_sans_jp.variable} antialiased`,
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </ThemeProvider>
+        <SWRConfig>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          </ThemeProvider>
+        </SWRConfig>
         <Toaster
           icons={{
             success: <Icons.checkCircle className="size-5 text-primary" />,
