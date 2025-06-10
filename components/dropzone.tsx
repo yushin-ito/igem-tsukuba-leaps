@@ -1,23 +1,80 @@
 "use client";
 
 import Icons from "@/components/icons";
+import { useUploadThing } from "@/lib/uploadthing";
+import { useAttachmentStore } from "@/store/attachment";
+import type { FileInfo } from "@/types";
+import { createId } from "@paralleldrive/cuid2";
 import { useDropzone } from "@uploadthing/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
-interface DropzoneProps {
-  onDrop: (acceptedFiles: File[]) => void;
-}
-
-const Dropzone = ({ onDrop }: DropzoneProps) => {
+const Dropzone = () => {
   const t = useTranslations("chat");
-  const [isShown, setIsShown] = useState(false);
   const counter = useRef(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const { add, update } = useAttachmentStore.getState();
+
+  const { startUpload } = useUploadThing("file", {
+    onUploadError: (error) => {
+      if (error.code === "TOO_SMALL") {
+        toast.error(t("error.too_small.title"), {
+          description: t("error.too_small.description", { size: "" }),
+        });
+
+        return;
+      }
+
+      if (error.code === "TOO_LARGE") {
+        toast.error(t("error.too_large.title"), {
+          description: t("error.too_large.description", { size: "" }),
+        });
+
+        return;
+      }
+
+      toast.error(t("error.upload.title"), {
+        description: t("error.upload.description"),
+      });
+    },
+    onClientUploadComplete: (res) => {
+      for (const data of res) {
+        const file = useAttachmentStore
+          .getState()
+          .files.find((f) => f.name === data.name);
+
+        if (file) {
+          update(file.id, {
+            ...file,
+            status: "success",
+            url: data.ufsUrl,
+            key: data.key,
+          });
+        }
+      }
+    },
+  });
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
-      onDrop(acceptedFiles);
-      setIsShown(false);
+      const files = acceptedFiles.map(
+        (file): FileInfo => ({
+          id: createId(),
+          status: "pending",
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          preview: URL.createObjectURL(file),
+        }),
+      );
+
+      for (const file of files) {
+        add(file);
+      }
+
+      startUpload(acceptedFiles);
+      setIsVisible(false);
       counter.current = 0;
     },
   });
@@ -28,7 +85,7 @@ const Dropzone = ({ onDrop }: DropzoneProps) => {
       e.stopPropagation();
       counter.current++;
       if (e.dataTransfer?.items && e.dataTransfer.items.length > 0) {
-        setIsShown(true);
+        setIsVisible(true);
       }
     };
 
@@ -37,14 +94,14 @@ const Dropzone = ({ onDrop }: DropzoneProps) => {
       e.stopPropagation();
       counter.current--;
       if (counter.current === 0) {
-        setIsShown(false);
+        setIsVisible(false);
       }
     };
 
     const onDropEvent = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      setIsShown(false);
+      setIsVisible(false);
       counter.current = 0;
     };
 
@@ -59,7 +116,7 @@ const Dropzone = ({ onDrop }: DropzoneProps) => {
     };
   }, []);
 
-  if (!isShown) {
+  if (!isVisible) {
     return null;
   }
 

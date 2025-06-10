@@ -1,6 +1,5 @@
 "use client";
 
-import type { FileInfo } from "@/components/chat";
 import Icons from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,36 +11,32 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { messageSchema } from "@/schemas/chat";
+import { useAttachmentStore } from "@/store/attachment";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { createId } from "@paralleldrive/cuid2";
 import type { Message } from "@prisma/client";
 import { Role } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { type KeyboardEvent, useEffect, useMemo } from "react";
+import type { KeyboardEvent } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWRMutation from "swr/mutation";
 import type { z } from "zod/v4";
 
-interface Preview {
-  info: FileInfo;
-  url: string;
-}
-
 type FormData = z.infer<typeof messageSchema>;
 
 interface ChatInputProps {
   roomId: string;
-  files: FileInfo[];
-  onSend: () => void;
-  onRemove: (id: string) => void;
+  scrollToBottom: () => void;
 }
 
-const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
+const ChatInput = ({ roomId, scrollToBottom }: ChatInputProps) => {
   const t = useTranslations("chat");
+  const files = useAttachmentStore((state) => state.files);
+  const { remove, clear } = useAttachmentStore.getState();
 
-  const isUploading = files.some((file) => file.status === "uploading");
+  const isPending = files.some((file) => file.status === "pending");
 
   const {
     register,
@@ -71,25 +66,29 @@ const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
   });
 
   const onSubmit = async (data: FormData) => {
-    const urls = files
-      .filter((f) => f.status === "completed")
-      .map((f) => `[${f.file.name}](${f.url})`)
-      .join("\n");
-    const text = [data.text, urls].filter(Boolean).join("\n\n");
     const message = {
       id: createId(),
       roomId,
       role: Role.USER,
       read: true,
-      text,
+      text: data.text,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
     await trigger(message, {
-      optimisticData: (prev) => [...(prev ?? []), message],
+      optimisticData: (prev) => {
+        const messages = (prev ?? []).map(
+          (item: Message & { isPending: boolean }) =>
+            item.isPending ? { ...item, isPending: false } : item,
+        );
+
+        return [...messages, { ...message, isPending: true }];
+      },
+      revalidate: false,
     });
+    scrollToBottom();
     reset();
-    onSend();
+    clear();
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -99,37 +98,18 @@ const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
     }
   };
 
-  const previews: Preview[] = useMemo(
-    () =>
-      files.map((info) => ({
-        info,
-        url: info.url ?? URL.createObjectURL(info.file),
-      })),
-    [files],
-  );
-
-  useEffect(() => {
-    return () => {
-      for (const item of previews) {
-        if (!item.info.url) {
-          URL.revokeObjectURL(item.url);
-        }
-      }
-    };
-  }, [previews]);
-
   return (
     <div className="w-full space-y-2 rounded-3xl border border-input bg-background p-4 shadow-xs">
-      {previews.length > 0 && (
+      {files.length > 0 && (
         <div className="no-scrollbar flex space-x-3 overflow-x-scroll">
-          {previews.map((item) => (
-            <div key={item.info.id} className="relative">
-              {item.info.file.type.startsWith("image/") ? (
+          {files.map((file) => (
+            <div key={file.id} className="relative">
+              {file.type.startsWith("image/") ? (
                 <div className="overflow-hidden rounded-lg border bg-black/30">
                   <div className="relative size-20">
                     <Image
-                      src={item.url}
-                      alt={item.info.file.name}
+                      src={file.url ?? file.preview ?? ""}
+                      alt={file.name}
                       fill
                       className="object-cover"
                     />
@@ -142,23 +122,22 @@ const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
                   </div>
                   <div className="min-w-0 flex-1 space-y-px">
                     <p className="truncate font-semibold text-sm">
-                      {item.info.file.name}
+                      {file.name}
                     </p>
                     <p className="truncate text-muted-foreground text-xs">
-                      {item.info.file.name.split(".").pop()?.toUpperCase() ||
-                        "FILE"}
+                      {file.name.split(".").pop()?.toUpperCase() || "FILE"}
                     </p>
                   </div>
                 </div>
               )}
-              {item.info.status === "uploading" && (
+              {file.status === "pending" && (
                 <div className="absolute inset-0 flex items-center justify-center rounded-xl">
                   <Icons.spinner className="size-5 animate-spin text-muted-foreground" />
                 </div>
               )}
-              {item.info.status === "completed" && (
+              {file.status === "success" && (
                 <Button
-                  onClick={() => onRemove(item.info.id)}
+                  onClick={() => remove(file.id)}
                   size="icon"
                   className="absolute top-1 right-1 size-5 rounded-full"
                 >
@@ -176,7 +155,6 @@ const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
           onKeyDown={onKeyDown}
           placeholder={t("placeholder")}
           className="!bg-transparent max-h-[420px] min-h-0 resize-none border-none px-2 shadow-none focus-visible:ring-0"
-          disabled={isSubmitting}
         />
         <div className="flex items-center justify-between">
           <DropdownMenu>
@@ -201,7 +179,7 @@ const ChatInput = ({ roomId, files, onSend, onRemove }: ChatInputProps) => {
             type="submit"
             size="icon"
             className="rounded-full"
-            disabled={!isValid || isUploading || isSubmitting}
+            disabled={!isValid || isPending || isSubmitting}
           >
             <Icons.arrowUp className="size-5" />
           </Button>

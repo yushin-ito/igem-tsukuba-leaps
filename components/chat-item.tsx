@@ -1,12 +1,12 @@
 import CodeBlock from "@/components/code-block";
 import Typewriter from "@/components/typewriter";
 import { siteConfig } from "@/config/site";
-import { rich } from "@/lib/utils";
+import { cn, rich } from "@/lib/utils";
 import { type Message, Role } from "@prisma/client";
 import useSWRMutation from "swr/mutation";
 
 interface ChatItemProps {
-  message: Message;
+  message: Message & { isPending?: boolean };
 }
 
 const ChatItem = ({ message }: ChatItemProps) => {
@@ -24,7 +24,13 @@ const ChatItem = ({ message }: ChatItemProps) => {
 
   if (message.role === Role.USER) {
     return (
-      <div key={message.id} className="flex justify-end">
+      <div
+        id={message.id}
+        key={message.id}
+        className={cn("flex items-start justify-end", {
+          "min-h-[calc(100dvh-286px)]": message.isPending,
+        })}
+      >
         <div className="max-w-lg whitespace-pre-wrap break-words rounded-3xl bg-accent px-5 py-2.5 text-accent-foreground shadow-xs">
           {message.text}
         </div>
