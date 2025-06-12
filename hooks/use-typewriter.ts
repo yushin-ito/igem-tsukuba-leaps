@@ -81,10 +81,12 @@ interface TypewriterOptions {
   cursor?: string;
   interval?: number;
   speed?: number;
+  onDone?: () => void;
 }
 
 export const useTypewriter = (blocks: Block[], options?: TypewriterOptions) => {
-  const { cursor = "|", interval = 300, speed = 20 } = options || {};
+  const { cursor = "|", interval = 300, speed = 20, onDone } = options || {};
+  const isMounted = useRef(false);
   const [state, dispatch] = useReducer(reducer, {
     blocks,
     position: 0,
@@ -135,6 +137,13 @@ export const useTypewriter = (blocks: Block[], options?: TypewriterOptions) => {
 
     return state.position === state.blocks.length - 1 && state.index >= length;
   }, [state]);
+
+  useEffect(() => {
+    if (isDone && !isMounted.current) {
+      onDone?.();
+      isMounted.current = true;
+    }
+  }, [isDone, onDone]);
 
   return { text: state.text, isDone };
 };
