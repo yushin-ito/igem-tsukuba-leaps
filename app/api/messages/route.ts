@@ -12,7 +12,7 @@ const searchParamsSchema = z.object({
 
 const bodySchema = z.object({
   text: z.string(),
-  role: z.enum([Role.user, Role.system]),
+  role: z.nativeEnum(Role),
 });
 
 export const GET = async (req: NextRequest) => {

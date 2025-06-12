@@ -13,7 +13,7 @@ const searchParamsSchema = z.object({
 const bodySchema = z.object({
   roomId: z.string(),
   text: z.string(),
-  role: z.enum([Role.user, Role.system]),
+  role: z.nativeEnum(Role),
 });
 
 export const POST = async (req: NextRequest) => {
