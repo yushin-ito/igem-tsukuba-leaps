@@ -1,3 +1,5 @@
+import type { BlockContent } from "mdast";
+
 export interface FileInfo {
   id: string;
   name: string;
@@ -8,3 +10,7 @@ export interface FileInfo {
   url?: string;
   key?: string;
 }
+
+export type Block = BlockContent & {
+  source: string;
+};

@@ -1,8 +1,9 @@
-import CodeBlock from "@/components/code-block";
-import Typewriter from "@/components/typewriter";
-import { siteConfig } from "@/config/site";
-import { cn, rich } from "@/lib/utils";
+"use client";
+import Markdown from "@/components/markdown";
+import { useTypewriter } from "@/hooks/use-typewriter";
+import { cn, parseMarkdownToBlocks } from "@/lib/utils";
 import { type Message, Role } from "@prisma/client";
+import { useEffect, useMemo } from "react";
 import useSWRMutation from "swr/mutation";
 
 interface ChatItemProps {
@@ -21,6 +22,19 @@ const ChatItem = ({ message }: ChatItemProps) => {
   };
 
   const { trigger } = useSWRMutation(key, fetcher);
+
+  const blocks = useMemo(
+    () => parseMarkdownToBlocks(message.text),
+    [message.text],
+  );
+
+  const { text, isDone } = useTypewriter(blocks);
+
+  useEffect(() => {
+    if (isDone) {
+      trigger({ read: true });
+    }
+  }, [isDone, trigger]);
 
   if (message.role === Role.USER) {
     return (
@@ -41,37 +55,11 @@ const ChatItem = ({ message }: ChatItemProps) => {
   if (message.role === Role.SYSTEM) {
     return (
       <div key={message.id}>
-        <div className="whitespace-pre-line leading-relaxed">
-          {message.read ? (
-            <>
-              {rich(message.text, {
-                components: {
-                  code: (chunks) => <CodeBlock>{chunks}</CodeBlock>,
-                  strong: (chunks) => <strong>{chunks}</strong>,
-                  br: () => <br />,
-                  hr: () => <hr className="my-4" />,
-                },
-                values: {
-                  name: siteConfig.name,
-                },
-              })}
-            </>
-          ) : (
-            <Typewriter speed={10} onDone={() => trigger({ read: true })}>
-              {rich(message.text, {
-                components: {
-                  code: (chunks) => <CodeBlock>{chunks}</CodeBlock>,
-                  strong: (chunks) => <strong>{chunks}</strong>,
-                  br: () => <br />,
-                  hr: () => <hr className="my-4" />,
-                },
-                values: {
-                  name: siteConfig.name,
-                },
-              })}
-            </Typewriter>
-          )}
-        </div>
+        {message.read ? (
+          <Markdown>{message.text}</Markdown>
+        ) : (
+          <Markdown>{text}</Markdown>
+        )}
       </div>
     );
   }

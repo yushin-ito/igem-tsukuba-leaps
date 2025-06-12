@@ -1,8 +1,10 @@
+import fs from "node:fs";
+import path from "node:path";
 import { auth } from "@/auth";
 import Chat from "@/components/chat";
 import { db } from "@/lib/db";
 import { Role } from "@prisma/client";
-import { getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { unauthorized } from "next/navigation";
 
 interface ChatPageProps {
@@ -10,7 +12,7 @@ interface ChatPageProps {
 }
 
 const ChatPage = async ({ params }: ChatPageProps) => {
-  const t = await getTranslations("chat");
+  const locale = await getLocale();
   const session = await auth();
   const { roomId } = await params;
 
@@ -30,10 +32,15 @@ const ChatPage = async ({ params }: ChatPageProps) => {
   });
 
   if (messages.length === 0) {
+    const text = fs.readFileSync(
+      path.join(process.cwd(), "content", "welcome", `${locale}.md`),
+      "utf-8",
+    );
+
     const message = await db.message.create({
       data: {
         roomId,
-        text: `${t.raw("prompt.welcome")}<hr/>${t.raw("prompt.overview")}<hr/>${t.raw("prompt.step1.instruction")}`,
+        text,
         role: Role.SYSTEM,
       },
     });
