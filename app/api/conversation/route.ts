@@ -4,10 +4,10 @@ import { z } from "zod";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { Role } from "@prisma/client";
+import { Role, Step } from "@prisma/client";
 
 const searchParamsSchema = z.object({
-  step: 
+  step: z.nativeEnum(Step).optional(),
 });
 
 const bodySchema = z.object({
@@ -25,16 +25,14 @@ export const POST = async (req: NextRequest) => {
     }
 
     const { searchParams } = new URL(req.url);
-    const { roomId } = searchParamsSchema.parse(
-      Object.fromEntries(searchParams),
-    );
+    const { step } = searchParamsSchema.parse(Object.fromEntries(searchParams));
 
     const json = await req.json();
     const body = bodySchema.parse(json);
 
     const message = await db.message.create({
       data: {
-        roomId,
+        roomId: body.roomId,
         text: body.text,
         role: body.role,
       },
