@@ -7,45 +7,14 @@ import { db } from "@/lib/db";
 import { Role } from "@prisma/client";
 
 const searchParamsSchema = z.object({
-  roomId: z.string(),
+  step: 
 });
 
 const bodySchema = z.object({
+  roomId: z.string(),
   text: z.string(),
   role: z.enum([Role.user, Role.system]),
 });
-
-export const GET = async (req: NextRequest) => {
-  try {
-    const session = await auth();
-
-    if (!session?.user) {
-      unauthorized();
-    }
-
-    const { searchParams } = new URL(req.url);
-    const { roomId } = searchParamsSchema.parse(
-      Object.fromEntries(searchParams),
-    );
-
-    const messages = await db.message.findMany({
-      where: {
-        roomId,
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    });
-
-    return NextResponse.json(messages, { status: 200 });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ errors: error.issues }, { status: 422 });
-    }
-
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
-};
 
 export const POST = async (req: NextRequest) => {
   try {

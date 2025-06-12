@@ -18,10 +18,7 @@ const NewChatInput = () => {
 
   const key = "/api/rooms";
 
-  const fetcher = async (
-    url: string,
-    { arg }: { arg: Pick<Room, "title"> },
-  ) => {
+  const fetcher = async (url: string, { arg }: { arg: Partial<Room> }) => {
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(arg),
@@ -42,7 +39,7 @@ const NewChatInput = () => {
 
   const onSubmit = () => {
     const message = {
-      title: t("untitled_chat"),
+      name: t("untitled_chat"),
     };
 
     trigger(message);

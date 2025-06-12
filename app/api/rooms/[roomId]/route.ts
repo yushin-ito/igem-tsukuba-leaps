@@ -14,7 +14,7 @@ const contextSchema = z.object({
 });
 
 const bodySchema = z.object({
-  title: z.string().min(3).max(128).optional(),
+  name: z.string().min(3).max(128).optional(),
 });
 
 export const DELETE = async (
@@ -72,7 +72,7 @@ export const PATCH = async (
         id: roomId,
       },
       data: {
-        title: body.title,
+        name: body.name,
         updatedAt: new Date(),
       },
     });

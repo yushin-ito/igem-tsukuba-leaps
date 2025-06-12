@@ -41,7 +41,7 @@ const ChatPage = async ({ params }: ChatPageProps) => {
       data: {
         roomId,
         text,
-        role: Role.SYSTEM,
+        role: Role.system,
       },
     });
 

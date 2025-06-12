@@ -1,5 +1,8 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'SYSTEM');
+CREATE TYPE "Role" AS ENUM ('user', 'system');
+
+-- CreateEnum
+CREATE TYPE "Step" AS ENUM ('loader', 'sampler', 'predictor', 'screener', 'generator', 'runner');
 
 -- CreateTable
 CREATE TABLE "accounts" (
@@ -55,7 +58,8 @@ CREATE TABLE "verification_tokens" (
 CREATE TABLE "rooms" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "step" "Step" NOT NULL DEFAULT 'loader',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

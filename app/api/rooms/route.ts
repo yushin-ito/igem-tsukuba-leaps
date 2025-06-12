@@ -10,7 +10,7 @@ const searchParamsSchema = z.object({
 });
 
 const bodySchema = z.object({
-  title: z.string(),
+  name: z.string(),
 });
 
 export const GET = async (req: NextRequest) => {
@@ -29,7 +29,7 @@ export const GET = async (req: NextRequest) => {
     const rooms = await db.room.findMany({
       where: {
         userId: session.user.id,
-        title: query
+        name: query
           ? {
               contains: query,
               mode: "insensitive",
@@ -64,7 +64,7 @@ export const POST = async (req: NextRequest) => {
 
     const room = await db.room.create({
       data: {
-        title: body.title,
+        name: body.name,
         userId: session.user.id,
       },
       select: { id: true },

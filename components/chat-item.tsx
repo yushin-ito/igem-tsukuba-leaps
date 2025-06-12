@@ -61,11 +61,11 @@ const SystemChatItem = ({ message }: ChatItemProps) => {
 };
 
 const ChatItem = ({ message }: ChatItemProps) => {
-  if (message.role === Role.USER) {
+  if (message.role === Role.user) {
     return <UserChatItem message={message} />;
   }
 
-  if (message.role === Role.SYSTEM) {
+  if (message.role === Role.system) {
     return <SystemChatItem message={message} />;
   }
 

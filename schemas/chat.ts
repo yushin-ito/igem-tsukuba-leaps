@@ -5,7 +5,7 @@ export const messageSchema = z.object({
 });
 
 export const renameSchema = z.object({
-  title: z
+  name: z
     .string()
     .min(1, { error: "too_short" })
     .max(64, { error: "too_long" }),

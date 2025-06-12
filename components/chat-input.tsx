@@ -69,7 +69,7 @@ const ChatInput = ({ roomId, scrollToBottom }: ChatInputProps) => {
     const message = {
       id: createId(),
       roomId,
-      role: Role.USER,
+      role: Role.user,
       read: true,
       text: data.text,
       createdAt: new Date(),

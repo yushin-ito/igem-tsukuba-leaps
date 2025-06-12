@@ -65,7 +65,8 @@ model VerificationToken {
 model Room {
   id        String   @id @default(cuid())
   userId    String   @map("user_id")
-  title     String
+  name      String
+  step      Step     @default(loader)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
@@ -90,6 +91,15 @@ model Message {
 }
 
 enum Role {
-  USER
-  SYSTEM
+  user
+  system
+}
+
+enum Step {
+  loader
+  sampler
+  predictor
+  screener
+  generator
+  runner
 }

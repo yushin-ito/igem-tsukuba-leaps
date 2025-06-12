@@ -140,7 +140,7 @@ const SearchDialog = (props: DialogProps) => {
                       onClick={() => props.onOpenChange?.(false)}
                     >
                       <Icons.chat className="size-5 text-muted-foreground" />
-                      <div className="truncate">{room.title}</div>
+                      <div className="truncate">{room.name}</div>
                     </Link>
                   ))}
                 </div>

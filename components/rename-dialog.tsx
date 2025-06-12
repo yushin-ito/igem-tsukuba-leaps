@@ -26,11 +26,11 @@ import type { z } from "zod/v4";
 type FormData = z.infer<typeof renameSchema>;
 
 interface RenameDialogProps extends DialogProps {
-  title: string;
+  name: string;
   roomId: string;
 }
 
-const RenameDialog = ({ title, roomId, ...props }: RenameDialogProps) => {
+const RenameDialog = ({ name, roomId, ...props }: RenameDialogProps) => {
   const t = useTranslations("chat");
   const { mutate } = useSWRConfig();
   const {
@@ -43,8 +43,8 @@ const RenameDialog = ({ title, roomId, ...props }: RenameDialogProps) => {
   });
 
   useEffect(() => {
-    setValue("title", title);
-  }, [title, setValue]);
+    setValue("name", name);
+  }, [name, setValue]);
 
   const key = `/api/rooms/${encodeURIComponent(roomId)}`;
 
@@ -70,7 +70,7 @@ const RenameDialog = ({ title, roomId, ...props }: RenameDialogProps) => {
   });
 
   const onSubmit = async (data: FormData) => {
-    await trigger({ title: data.title });
+    await trigger({ name: data.name });
     props.onOpenChange?.(false);
   };
 
@@ -86,10 +86,9 @@ const RenameDialog = ({ title, roomId, ...props }: RenameDialogProps) => {
           </DialogHeader>
           <div className="space-y-2">
             <Label htmlFor="title">{t("name")}</Label>
-            <Input {...register("title")} disabled={isSubmitting} />
-            {errors.title && (
+            <Input {...register("name")} disabled={isSubmitting} />
+            {errors.name && (
               <span className="px-1 text-destructive text-xs">
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-expect-error */}
                 {t(errors.title.message)}
               </span>

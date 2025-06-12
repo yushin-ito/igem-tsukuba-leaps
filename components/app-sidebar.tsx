@@ -41,7 +41,7 @@ import {
 
 interface DialogPayload {
   search: undefined;
-  rename: { title: string; roomId: string };
+  rename: { name: string; roomId: string };
   share: { roomId: string };
   delete: { roomId: string };
 }
@@ -160,7 +160,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                               className="group/button data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground [&_svg:not([class*='size-'])]:size-4"
                             >
                               <Link href={`/chat/${item.id}`}>
-                                {item.title}
+                                {item.name}
                                 <DropdownMenuTrigger asChild>
                                   <Icons.ellipsis className="ml-auto opacity-0 transition-opacity group-hover/button:opacity-100 data-[state=open]:opacity-100" />
                                 </DropdownMenuTrigger>
@@ -178,7 +178,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                                     open({
                                       type: "rename",
                                       data: {
-                                        title: item.title,
+                                        name: item.name,
                                         roomId: item.id,
                                       },
                                     })
@@ -234,7 +234,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
       <RenameDialog
         {...getDialogProps("rename")}
         roomId={state.type === "rename" ? state.data.roomId : ""}
-        title={state.type === "rename" ? state.data.title : ""}
+        name={state.type === "rename" ? state.data.name : ""}
       />
       <ShareDialog
         {...getDialogProps("share")}
