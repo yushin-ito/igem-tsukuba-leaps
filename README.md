@@ -1,4 +1,4 @@
-# iGEM TSUKUBA Editor
+# LEAPS
 
 ![version](https://img.shields.io/badge/version-1.0.0-red.svg)
 ![stars](https://img.shields.io/github/stars/yushin-ito/leaps?color=yellow)
