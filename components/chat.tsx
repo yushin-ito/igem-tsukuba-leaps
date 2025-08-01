@@ -105,7 +105,7 @@ const Chat = ({ roomId, messages }: ChatProps) => {
           <ChatInput roomId={roomId} scrollToBottom={scrollToBottom} />
         </div>
       </div>
-      <Dropzone />
+      <Dropzone roomId={roomId} />
     </>
   );
 };

@@ -15,6 +15,7 @@ const contextSchema = z.object({
 
 const bodySchema = z.object({
   name: z.string().min(3).max(128).optional(),
+  fileKey: z.string().optional(),
 });
 
 export const DELETE = async (
@@ -73,6 +74,7 @@ export const PATCH = async (
       },
       data: {
         name: body.name,
+        fileKey: body.fileKey,
         updatedAt: new Date(),
       },
     });

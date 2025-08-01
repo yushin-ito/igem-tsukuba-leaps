@@ -6,9 +6,9 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   file: f({
-    blob: {
-      maxFileSize: "8MB",
-      maxFileCount: 8,
+    "text/csv": {
+      maxFileCount: 1,
+      maxFileSize: "1GB",
     },
   })
     .middleware(async () => {
@@ -20,7 +20,7 @@ export const ourFileRouter = {
 
       return { userId: session.user.id };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata }) => {
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;
