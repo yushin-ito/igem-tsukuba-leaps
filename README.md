@@ -1,8 +1,8 @@
 # LEAPS
 
 ![version](https://img.shields.io/badge/version-1.0.0-red.svg)
-![stars](https://img.shields.io/github/stars/yushin-ito/leaps?color=yellow)
-![commit-activity](https://img.shields.io/github/commit-activity/t/yushin-ito/leaps)
+![stars](https://img.shields.io/github/stars/yushin-ito/igem-tsukuba-leaps?color=yellow)
+![commit-activity](https://img.shields.io/github/commit-activity/t/yushin-ito/igem-tsukuba-leaps)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 <br/>
@@ -52,8 +52,8 @@ leaps/
 1. リポジトリをクローン
 
    ```bash
-   git clone https://github.com/yourusername/leaps.git
-   cd leaps
+   git clone https://github.com/yourusername/igem-tsukuba-leaps.git
+   cd igem-tsukuba-leaps
    ```
 
 2. パッケージのインストール
