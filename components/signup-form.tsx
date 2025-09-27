@@ -60,7 +60,6 @@ const SignupForm = () => {
               />
               {errors.email && (
                 <span className="px-1 text-destructive text-xs">
-                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                   {/* @ts-expect-error */}
                   {t(errors.email.message)}
                 </span>

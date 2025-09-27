@@ -25,7 +25,7 @@ interface UserNavProps {
 }
 
 const NavUser = ({ user }: UserNavProps) => {
-  const t = useTranslations("chat");
+  const t = useTranslations("project");
   const isMobile = useIsMobile();
 
   return (
@@ -92,7 +92,7 @@ const NavUser = ({ user }: UserNavProps) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Icons.logOut />
-              {t("logOut")}
+              {t("log_out")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

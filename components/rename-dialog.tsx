@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { renameSchema } from "@/schemas/chat";
+import { renameSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import type { Room } from "@prisma/client";
+import type { Project } from "@prisma/client";
 import type { DialogProps } from "@radix-ui/react-dialog";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
@@ -27,11 +27,11 @@ type FormData = z.infer<typeof renameSchema>;
 
 interface RenameDialogProps extends DialogProps {
   name: string;
-  roomId: string;
+  projectId: string;
 }
 
-const RenameDialog = ({ name, roomId, ...props }: RenameDialogProps) => {
-  const t = useTranslations("chat");
+const RenameDialog = ({ name, projectId, ...props }: RenameDialogProps) => {
+  const t = useTranslations("project");
   const { mutate } = useSWRConfig();
   const {
     register,
@@ -46,31 +46,32 @@ const RenameDialog = ({ name, roomId, ...props }: RenameDialogProps) => {
     setValue("name", name);
   }, [name, setValue]);
 
-  const key = `/api/rooms/${encodeURIComponent(roomId)}`;
-
-  const fetcher = async (url: string, { arg }: { arg: Partial<Room> }) => {
-    const response = await fetch(url, {
-      method: "PATCH",
-      body: JSON.stringify(arg),
-    });
-    return await response.json();
-  };
-
-  const { trigger } = useSWRMutation(key, fetcher, {
-    onSuccess: () => {
-      toast.success(t("success.rename.title"), {
-        description: t("success.rename.description"),
+  const { trigger: updateProject } = useSWRMutation(
+    `/api/projects/${encodeURIComponent(projectId)}`,
+    async (url: string, { arg }: { arg: Partial<Project> }) => {
+      const response = await fetch(url, {
+        method: "PATCH",
+        body: JSON.stringify(arg),
       });
-      mutate("/api/rooms");
+
+      return await response.json();
     },
-    onError: () =>
-      toast.error(t("error.rename.title"), {
-        description: t("error.rename.description"),
-      }),
-  });
+    {
+      onSuccess: () => {
+        toast.success(t("success.rename.title"), {
+          description: t("success.rename.description"),
+        });
+        mutate("/api/projects");
+      },
+      onError: () =>
+        toast.error(t("error.rename.title"), {
+          description: t("error.rename.description"),
+        }),
+    },
+  );
 
   const onSubmit = async (data: FormData) => {
-    await trigger({ name: data.name });
+    await updateProject({ name: data.name });
     props.onOpenChange?.(false);
   };
 
@@ -85,12 +86,12 @@ const RenameDialog = ({ name, roomId, ...props }: RenameDialogProps) => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="title">{t("name")}</Label>
+            <Label htmlFor="title">{t("name.title")}</Label>
             <Input {...register("name")} disabled={isSubmitting} />
             {errors.name && (
               <span className="px-1 text-destructive text-xs">
                 {/* @ts-expect-error */}
-                {t(errors.title.message)}
+                {t(`name.${errors.name.message}`)}
               </span>
             )}
           </div>

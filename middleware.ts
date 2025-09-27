@@ -13,7 +13,7 @@ export default auth((req) => {
 
   if (isAuthPage) {
     if (isAuth) {
-      return NextResponse.redirect(new URL("/chat", req.url));
+      return NextResponse.redirect(new URL("/project", req.url));
     }
 
     return NextResponse.next();
@@ -34,5 +34,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/chat/:path*", "/login", "/signup"],
+  matcher: ["/project/:path*", "/login", "/signup"],
 };

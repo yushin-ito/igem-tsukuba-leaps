@@ -30,7 +30,7 @@
   "top": {
     "metadata": {
       "title": "トップ",
-      "description": "LEAPSは、少数の実験データからでも高性能なタンパク質配列の設計を可能にするために開発された対話型のWebアプリケーションです。難しい操作は一切なく、誰でも簡単に使えるインターフェースを提供しています。"
+      "description": "LEAPSは、少数の実験データからでも高性能なタンパク質の設計を可能にするために開発された対話型のWebアプリケーションです。難しい操作は一切なく、誰でも簡単に使えるインターフェースを提供しています。"
     },
     "about_us": "私たちについて",
     "get_started": "はじめる"
@@ -75,12 +75,181 @@
       }
     }
   },
-  "chat": {
+  "project": {
     "metadata": {
-      "title": "チャット",
-      "description": ""
+      "title": "プロジェクト",
+      "description": "あなたの理想のタンパク質を設計しましょう。"
     },
-    "search_chat": "チャットを検索",
+    "step1": {
+      "title": "Step1. データのアップロード",
+      "description": "タンパク質と各タンパク質に対する実験値を含むCSVファイルをアップロードしてください。",
+      "too_few_rows": "データは40行以上にしてください。",
+      "required_id": "1列目のヘッダーはidにしてください。",
+      "required_sequence": "2列目のヘッダーはsequenceにしてください。",
+      "too_few_values": "実験値は1列以上にしてください。",
+      "too_many_values": "実験値は5列以下にしてください。",
+      "upload": "アップロード",
+      "clear": "クリア",
+      "delimiter": "区切り文字",
+      "comma": "カンマ",
+      "semicolon": "セミコロン",
+      "tab": "タブ",
+      "pipe": "パイプ",
+      "field": "項目",
+      "asc": "昇順",
+      "desc": "降順",
+      "hide": "非表示",
+      "no_data_found": "データが見つかりません",
+      "page": "{index}ページ目",
+      "rows": "{count}件",
+      "go_to_prev_page": "前のページへ",
+      "go_to_next_page": "次のページへ",
+      "search_sequence": "タンパク質を検索"
+    },
+    "step2": {
+      "title": "Step2. 最適化の設定",
+      "description": "各実験値に対して、最適化の目標を設定してください。",
+      "direction": "方向",
+      "max": "最大値: {value}",
+      "min": "最小値: {value}",
+      "mean": "平均値: {value}",
+      "median": "中央値: {value}",
+      "maximize": "最大化",
+      "minimize": "最小化",
+      "range": "範囲",
+      "lower": "下限",
+      "upper": "上限",
+      "invalid_type": "数値で入力してください。",
+      "invalid_range": "下限は上限より小さくしてください。"
+    },
+    "step3": {
+      "title": "Step3. 高度な設定",
+      "description": "各モジュールの設定を変更できます。このステップはスキップ可能です。",
+      "configure": "設定する",
+      "sampler": {
+        "title": "Sampler",
+        "description": "Samplerは、タンパク質をサンプリングするモジュールです。",
+        "num_shuffles": {
+          "title": "シャッフル数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "shuffle_rate": {
+          "title": "シャッフル率",
+          "description": "",
+          "invalid_type": "数値で入力してください。",
+          "too_small": "0以上で入力してください。",
+          "too_big": "1以下で入力してください。"
+        },
+        "window_sizes": {
+          "title": "ウィンドウサイズ",
+          "description": "",
+          "invalid_format": "カンマ区切りで入力してください。",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        }
+      },
+      "predictor": {
+        "title": "Predictor",
+        "description": "Predictorは、タンパク質の機能値を予測するモジュールです。",
+        "destruct_per_samples": {
+          "title": "破壊するタンパク質の数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "num_destructions": { 
+          "title": "破壊する回数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "mutate_per_samples": {
+          "title": "変異させるタンパク質の数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "num_mutations": {
+          "title": "変異させるアミノ酸の数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        }
+      },
+      "evaluator": {
+        "title": "Evaluator",
+        "description": "Evaluatorは、タンパク質をスクリーニングするモジュールです。",
+        "series": "直列",
+        "parallel": "並列",
+        "top_p": {
+          "title": "Top P",
+          "description": "",
+          "invalid_type": "数値で入力してください。",
+          "too_small": "0以上で入力してください。",
+          "too_big": "1以下で入力してください。"
+        },
+        "top_k": {
+          "title": "Top K",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        }
+      },
+      "generator": {
+        "title": "Generator",
+        "description": "Generatorは、タンパク質を生成するモジュールです。",
+        "max_new_token": {
+          "title": "トークン数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "0以上で入力してください。"
+        },
+        "prompt": {
+          "title": "プロンプト",
+          "description": "",
+          "invalid_format": "標準アミノ酸で入力してください。"
+        }
+      },
+      "early_stopper": {
+        "title": "Early Stopper",
+        "description": "Early Stopperは、早期終了するモジュールです。",
+        "num_samples": {
+          "title": "サンプリングするタンパク質の数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "patience": {
+          "title": "待機する回数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        }
+      },
+      "runner": {
+        "title": "Runner",
+        "description": "Runnerは、各モジュールを管理するモジュールです。",
+        "num_iterations": {
+          "title": "イテレーション数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        },
+        "num_sequences": {
+          "title": "生成するタンパク質の数",
+          "description": "",
+          "invalid_type": "整数で入力してください。",
+          "too_small": "1以上で入力してください。"
+        }
+      },
+      "done": "完了",
+      "clear": "クリア"
+    },
+    "run": "実行する",
+    "stop": "停止する",
+    "search_project": "プロジェクトを検索",
     "today": "今日",
     "yesterday": "昨日",
     "last_week": "先週",
@@ -88,81 +257,67 @@
     "settings": "設定",
     "terms": "規約",
     "faq": "FAQ",
-    "logOut": "ログアウト",
+    "log_out": "ログアウト",
     "message": "メッセージ",
-    "welcome": "{name}へようこそ",
-    "start": "チャットをはじめる",
-    "placeholder": "メッセージを入力しましょう。",
-    "upload": "アップロード",
-    "template": "テンプレート",
-    "new_chat": "新しいチャット",
-    "untitled_chat": "無題のチャット",
+    "welcome": "{name}へようこそ。",
+    "start": "プロジェクトをはじめる",
+    "new_project": "新しいプロジェクト",
+    "untitled_project": "無題のプロジェクト",
     "share": "共有する",
     "rename": "名前を変更する",
     "archaive": "アーカイブする",
     "delete": "削除する",
-    "prompt": {
-      "welcome": "{name}へようこそ。<br/><br/>LEAPSは、少数の実験データからでも高性能なタンパク質配列の設計を可能にするために開発された対話型のWebアプリケーションです。難しい操作は一切なく、誰でも簡単に使えるインターフェースを提供しています。<br/>",
-      "overview": "以下のステップで進めていきます。<br/><br/><strong>Step1. データセットの入力</strong><br/>タンパク質配列と各配列に対する複数の実験値を含むCSVファイルをアップロードします。<br/><br/><strong>Step2. サンプルの作成</strong><br/> アップロードされた配列をもとに、シャッフリングやランダム変異によって新しい配列を大量に生成します。<br/><br/><strong>Step3. 予測モデルの訓練</strong><br/>各実験値に対して、予測モデルを学習します。<br/><br/><strong>Step4. スクリーニングの実施</strong><br/>予測モデルによる予測値と生成モデルによる尤度を用いて、生成された配列を評価し、閾値を用いてフィルタリングします。<br/><br/><strong>Step5. 生成モデルの訓練</strong><br/>スクリーニングされた優れた配列群を用いて、生成モデルをファインチューニングします。<br/><br/>以上のステップを繰り返すことで、目的に応じた最適なタンパク質配列の生成を目指します。<br/>",
-      "step1": {
-        "instruction": "<strong>Step1: データセットの入力</strong><br/>CSVファイルをアップロードしてください。<br/><br/>形式は以下のようにしてください。<br/><code>sequence,value1,value2,value3</code><br/>ファイルのアップロードが完了すると次にステップに進みます。<br/>"
-      }
-    },
-    "file": "ファイル",
-    "copy": "コピーする",
-    "copied": "コピーしました",
-    "dropzone": {
-      "title": "ファイルをアップロード",
-      "description": "ここにファイルをドロップしてアップロードします。"
-    },
     "empty_placeholder": {
       "title": "検索結果が見つかりませんでした",
       "description": "別のキーワードで検索してみてください。"
     },
     "dialog": {
       "search": {
-        "title": "チャットを検索",
-        "description": "キーワードを入力してチャットを検索します。"
+        "title": "プロジェクトを検索",
+        "description": "キーワードを入力してプロジェクトを検索します。"
       },
       "rename": {
-        "title": "チャットの名前を変更",
-        "description": "新しいチャット名を入力してください。"
+        "title": "プロジェクトの名前を変更",
+        "description": "新しいプロジェクト名を入力してください。"
       },
       "share": {
-        "title": "チャットを共有",
-        "description": "チャットのリンクをコピーして共有します。"
+        "title": "プロジェクトを共有",
+        "description": "プロジェクトのリンクをコピーして共有します。"
       },
       "delete": {
-        "title": "チャットを削除しますか？",
-        "description": "このチャットを削除すると、すべてのメッセージが失われます。"
+        "title": "プロジェクトを削除しますか？",
+        "description": "このプロジェクトを削除すると、すべてのメッセージが失われます。"
       }
     },
     "link": "リンク",
-    "name": "名前",
     "continue": "続ける",
     "cancel": "キャンセル",
     "save": "保存",
-    "too_short": "名前は3文字以上で入力してください。",
-    "too_long": "名前は64文字以下で入力してください。",
+    "name": {
+      "title": "名前",
+      "description": "",
+      "too_short": "3文字以上で入力してください。",
+      "too_long": "64文字以下で入力してください。"
+    },
     "success": {
       "copy": "クリップボードへコピーしました。",
       "rename": {
-        "title": "チャット名が変更されました。",
-        "description": "チャット名が正常に変更されました。"
+        "title": "プロジェクト名が変更されました。",
+        "description": "プロジェクト名が正常に変更されました。"
       },
       "delete": {
-        "title": "チャットが削除されました。",
-        "description": "チャットが正常に削除されました。"
+        "title": "プロジェクトが削除されました。",
+        "description": "プロジェクトが正常に削除されました。"
       }
     },
     "error": {
       "create": {
         "title": "エラーが発生しました。",
-        "description": "ルームの作成に失敗しました。もう一度お試しください。"
+        "description": "プロジェクトの作成に失敗しました。もう一度お試しください。"
       },
-      "send": {
+      "upload": {
         "title": "エラーが発生しました。",
-        "description": "メッセージの送信に失敗しました。もう一度お試しください。"
+        "description": "ファイルのアップロードに失敗しました。もう一度お試しください。"
       },
       "copy": {
         "title": "エラーが発生しました。",
@@ -170,27 +325,11 @@
       },
       "rename": {
         "title": "エラーが発生しました。",
-        "description": "チャット名の変更に失敗しました。もう一度お試しください。"
+        "description": "プロジェクト名の変更に失敗しました。もう一度お試しください。"
       },
       "delete": {
         "title": "エラーが発生しました。",
-        "description": "チャットの削除に失敗しました。もう一度お試しください。"
-      },
-      "upload": {
-        "title": "エラーが発生しました。",
-        "description": "ファイルのアップロードに失敗しました。もう一度お試しください。"
-      },
-      "unsported": {
-        "title": "エラーが発生しました。",
-        "description": "サポートされていないファイル形式です。{file}のみサポートされています。"
-      },
-      "too_small": {
-        "title": "エラーが発生しました。",
-        "description": "ファイルサイズが小さすぎます。{size}以上ののファイルを選んでください。"
-      },
-      "too_large": {
-        "title": "エラーが発生しました。",
-        "description": "ファイルサイズが大きすぎます。{size}以下ののファイルを選んでください。"
+        "description": "プロジェクトの削除に失敗しました。もう一度お試しください。"
       }
     }
   },

@@ -75,12 +75,182 @@
       }
     }
   },
-  "chat": {
+  "project": {
     "metadata": {
-      "title": "Chat",
-      "description": ""
+      "title": "Project",
+      "description": "Design your ideal protein."
     },
-    "search_chat": "Search Chat",
+    "step1": {
+      "title": "Step1. Upload Dataset",
+      "description": "Upload a CSV file containing proteins and experimental values for each protein.",
+      "too_few_rows": "Rows must be at least 40.",
+      "required_id": "The header of the first column must be 'id'.",
+      "required_sequence": "The header of the second column must be 'sequence'.",
+      "too_few_values": "Experimental values must be at least 1 column.",
+      "too_many_values": "Experimental values must be at most 5 columns.",
+      "delimiter": "Delimiter",
+      "comma": "Comma",
+      "semicolon": "Semicolon",
+      "tab": "Tab",
+      "pipe": "Pipe",
+      "upload": "Upload",
+      "clear": "Clear",
+      "field": "Field",
+      "column": "Column",
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Hide",
+      "no_data_found": "No data found.",
+      "page": "Page {index}",
+      "rows": "{count} Rows",
+      "go_to_prev_page": "Go to previous page",
+      "go_to_next_page": "Go to next page",
+      "search_sequence": "Search Sequence"
+    },
+    "step2": {
+      "title": "Step2. Configure Optimization",
+      "description": "Set the optimization direction for each experimental value.",
+      "direction": "Direction",
+      "max": "Max: {value}",
+      "min": "Min: {value}",
+      "mean": "Mean: {value}",
+      "median": "Median: {value}",
+      "maximize": "Maximize",
+      "minimize": "Minimize",
+      "range": "Range",
+      "lower": "Lower",
+      "upper": "Upper",
+      "invalid_type": "Must be a number.",
+      "invalid_range": "Lower must be less than Upper."
+    },
+    "step3": {
+      "title": "Step3. Advanced Settings",
+      "description": "Change the settings of each module. This step is optional.",
+      "configure": "Configure",
+      "sampler": {
+        "title": "Sampler",
+        "description": "Sampler is a module that samples proteins.",
+        "num_shuffles": {
+          "title": "Number of Shuffles",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "shuffle_rate": {
+          "title": "Shuffle Rate",
+          "description": "",
+          "invalid_type": "Must be a number.",
+          "too_small": "Must be at least 0.",
+          "too_big": "Must be at most 1."
+        },
+        "window_sizes": {
+          "title": "Window Sizes",
+          "description": "",
+          "invalid_format": "Must be a comma-separated list of integers.",
+          "invalid_type": "Must be integers.",
+          "too_small": "Must be at least 1."
+        }
+      },
+      "predictor": {
+        "title": "Predictor",
+        "description": "Predictor is a module that predicts the functional values of proteins.",
+        "destruct_per_samples": {
+          "title": "Number of Proteins to Destruct",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "num_destructions": {
+          "title": "Number of Destructions",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "mutate_per_samples": {
+          "title": "Number of Proteins to Mutate",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "num_mutations": {
+          "title": "Number of Mutations",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        }
+      },
+      "evaluator": {
+        "title": "Evaluator",
+        "description": "Evaluator is a module that screens proteins.",
+        "series": "Series",
+        "parallel": "Parallel",
+        "top_p": {
+          "title": "Top P",
+          "description": "",
+          "invalid_type": "Must be a number.",
+          "too_small": "Must be at least 0.",
+          "too_big": "Must be at most 1."
+        },
+        "top_k": {
+          "title": "Top K",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        }
+      },
+      "generator": {
+        "title": "Generator",
+        "description": "Generator is a module that generates new proteins.",
+        "max_new_token": {
+          "title": "Number of Tokens",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 0."
+        },
+        "prompt": {
+          "title": "Prompt",
+          "description": "",
+          "invalid_format": "Must be a standard amino acid sequence."
+        }
+      },
+      "early_stopper": {
+        "title": "Early Stopper",
+        "description": "Early Stopper is a module that stops the process early.",
+        "num_samples": {
+          "title": "Number of Samples",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "patience": {
+          "title": "Patience",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        }
+      },
+      "runner": {
+        "title": "Runner",
+        "description": "Runner is a module that manages each module.",
+        "num_iterations": {
+          "title": "Number of Iterations",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        },
+        "num_sequences": {
+          "title": "Number of Proteins to Generate",
+          "description": "",
+          "invalid_type": "Must be an integer.",
+          "too_small": "Must be at least 1."
+        }
+      },
+      "done": "Done",
+      "clear": "Clear"
+    },
+    "run": "Run",
+    "stop": "Stop",
+    "search_project": "Search Project",
     "today": "Today",
     "yesterday": "Yesterday",
     "last_week": "Last Week",
@@ -88,49 +258,32 @@
     "settings": "Settings",
     "terms": "Terms",
     "faq": "FAQ",
-    "logOut": "Log Out",
+    "log_out": "Log Out",
     "message": "Message",
-    "welcome": "Welcome to {name}",
-    "start": "Start Chat",
-    "placeholder": "Type your message here...",
-    "upload": "Upload",
-    "template": "Template",
-    "new_chat": "New Chat",
-    "untitled_chat": "Untitled Chat",
+    "welcome": "Welcome to {name}.",
+    "start": "Start Project",
+    "new_project": "New Project",
+    "untitled_project": "Untitled Project",
     "share": "Share",
     "rename": "Rename",
     "archaive": "Archive",
     "delete": "Delete",
-    "prompt": {
-      "welcome": "Welcome to {name}.<br/><br/>LEAPS is an interactive web application developed to enable the design of high-performance protein sequences, even from a small amount of experimental data. It features a simple, user-friendly interface that requires no complex operations, making it accessible to anyone.",
-      "overview": "The following steps will guide you through the process:<br/><br/><strong>Step 1. Dataset Upload</strong><br/>Upload a CSV file containing protein sequences and multiple experimental values for each sequence.<br/><br/><strong>Step 2. Sample Generation</strong><br/>Based on the uploaded sequences, new sequences will be generated through shuffling or random mutation.<br/><br/><strong>Step 3. Predictor Training</strong><br/>Train a prediction model for each experimental value.<br/><br/><strong>Step 4. Screening</strong><br/>Evaluate the generated sequences using predicted values and likelihoods from the generative model, and filter them based on thresholds.<br/><br/><strong>Step 5. Generative Model Fine-tuning</strong><br/>Fine-tune the generative model using the high-quality sequences selected through screening.<br/><br/>By repeating these steps, the system aims to generate optimal protein sequences tailored to your objectives.",
-      "step1": {
-        "instruction": "<strong>Step 1: Dataset Upload</strong><br/>Please upload a CSV file.<br/><br/>Use the following format:<br/><code>sequence,value1,value2,value3</code><br/>Once the upload is complete, the next step will begin automatically."
-      }
-    },
-    "file": "File",
-    "copy": "Copy",
-    "copied": "Copied",
-    "dropzone": {
-      "title": "Upload File",
-      "description": "Drop your file here to upload."
-    },
     "empty_placeholder": {
       "title": "No search results found",
       "description": "Please try searching with different keywords."
     },
     "dialog": {
       "search": {
-        "title": "Search Chat",
-        "description": "Enter keywords to search in the chat."
+        "title": "Search Project",
+        "description": "Enter keywords to search in the project."
       },
       "rename": {
-        "title": "Rename Chat",
-        "description": "Enter a new name for the chat."
+        "title": "Rename Project",
+        "description": "Enter a new name for the project."
       },
       "share": {
-        "title": "Share Chat",
-        "description": "Copy the link to share the chat."
+        "title": "Share Project",
+        "description": "Copy the link to share the project."
       },
       "delete": {
         "title": "Are you sure you want to delete this post?",
@@ -138,31 +291,34 @@
       }
     },
     "link": "Link",
-    "name": "Name",
     "continue": "Continue",
     "cancel": "Cancel",
     "save": "Save",
-    "too_short": "Name must be at least 3 characters long.",
-    "too_long": "Name must be 64 characters or less.",
+    "name": {
+      "title": "Name",
+      "description": "",
+      "too_short": "Must be at least 3 characters long.",
+      "too_long": "Must be 64 characters or less."
+    },
     "success": {
       "copy": "Copied to clipboard.",
       "rename": {
-        "title": "Chat Renamed",
-        "description": "The chat has been successfully renamed."
+        "title": "Project Renamed",
+        "description": "The project has been successfully renamed."
       },
       "delete": {
-        "title": "Chat Deleted",
-        "description": "The chat has been successfully deleted."
+        "title": "Project Deleted",
+        "description": "The project has been successfully deleted."
       }
     },
     "error": {
       "create": {
         "title": "Something went wrong.",
-        "description": "Your room create failed. Please try again." 
+        "description": "Your project create failed. Please try again." 
       },
-      "send": {
+      "upload": {
         "title": "Something went wrong.",
-        "description": "Your message send failed. Please try again." 
+        "description": "Your file upload failed. Please try again." 
       },
       "copy": {
         "title": "Something went wrong.",
@@ -170,27 +326,11 @@
       },
       "rename": {
         "title": "Something went wrong.",
-        "description": "Your chat rename failed. Please try again."
+        "description": "Your project rename failed. Please try again."
       },
       "delete": {
         "title": "Something went wrong.",
-        "description": "Your chat delete failed. Please try again."
-      },
-      "upload": {
-        "title": "Something went wrong.",
-        "description": "Your file upload failed. Please try again."
-      },
-      "unsported": {
-        "title": "Something went wrong.",
-        "description": "Unsupported file format. Only {file} is supported."
-      },
-      "too_small": {
-        "title": "Something went wrong.",
-        "description": "The file is too small. Please choose a file larger than {size}."
-      },
-      "too_large": {
-        "title": "Something went wrong.",
-        "description": "The file is too large. Please choose a file smaller than {size}."
+        "description": "Your project delete failed. Please try again."
       }
     }
   },

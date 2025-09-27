@@ -18,46 +18,46 @@ import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
 interface DeleteDialogProps extends AlertDialogProps {
-  roomId: string;
+  projectId: string;
 }
 
-const DeleteDialog = ({ roomId, ...props }: DeleteDialogProps) => {
-  const t = useTranslations("chat");
+const DeleteDialog = ({ projectId, ...props }: DeleteDialogProps) => {
+  const t = useTranslations("project");
   const router = useRouter();
   const segment = useSelectedLayoutSegment();
   const { mutate } = useSWRConfig();
 
-  const key = `/api/rooms/${encodeURIComponent(roomId)}`;
-
-  const fetcher = async (url: string) => {
-    const response = await fetch(url, {
-      method: "DELETE",
-    });
-    return await response.json();
-  };
-
-  const { trigger } = useSWRMutation(key, fetcher, {
-    onSuccess: () => {
-      mutate("/api/rooms");
-
-      props.onOpenChange?.(false);
-
-      toast.success(t("success.delete.title"), {
-        description: t("success.delete.description"),
+  const { trigger: deleteProject } = useSWRMutation(
+    `/api/projects/${encodeURIComponent(projectId)}`,
+    async (url: string) => {
+      const response = await fetch(url, {
+        method: "DELETE",
       });
+      return await response.json();
     },
-    onError: () =>
-      toast.error(t("error.delete.title"), {
-        description: t("error.delete.description"),
-      }),
-  });
+    {
+      onSuccess: () => {
+        mutate("/api/projects");
+
+        props.onOpenChange?.(false);
+
+        toast.success(t("success.delete.title"), {
+          description: t("success.delete.description"),
+        });
+      },
+      onError: () =>
+        toast.error(t("error.delete.title"), {
+          description: t("error.delete.description"),
+        }),
+    },
+  );
 
   const onDelete = () => {
-    if (segment === roomId) {
-      router.push("/chat");
+    if (segment === projectId) {
+      router.push("/project");
     }
 
-    trigger();
+    deleteProject();
   };
 
   return (

@@ -18,13 +18,13 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface ShareDialogProps extends DialogProps {
-  roomId: string;
+  projectId: string;
 }
 
-const ShareDialog = ({ roomId, ...props }: ShareDialogProps) => {
-  const link = `${siteConfig.url}/${roomId}`;
+const ShareDialog = ({ projectId, ...props }: ShareDialogProps) => {
+  const link = `${siteConfig.url}/${projectId}`;
 
-  const t = useTranslations("chat");
+  const t = useTranslations("project");
 
   const onCopy = async () => {
     try {

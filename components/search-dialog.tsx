@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import type { Room } from "@prisma/client";
+import { cn, fetcher } from "@/lib/utils";
+import type { Project } from "@prisma/client";
 import type { DialogProps } from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { differenceInDays, isToday, isYesterday } from "date-fns";
@@ -21,7 +21,7 @@ import * as R from "remeda";
 import useSWR from "swr";
 
 const SearchDialog = (props: DialogProps) => {
-  const t = useTranslations("chat");
+  const t = useTranslations("project");
   const [query, setQuery] = useState("");
   const ref = useRef<HTMLInputElement>(null);
 
@@ -36,13 +36,8 @@ const SearchDialog = (props: DialogProps) => {
     [],
   );
 
-  const fetcher = async (url: string) => {
-    const response = await fetch(url);
-    return response.json();
-  };
-
-  const { data, isLoading } = useSWR<Room[]>(
-    `/api/rooms?query=${query}`,
+  const { data, isLoading } = useSWR<Project[]>(
+    `/api/projects?query=${query}`,
     fetcher,
   );
 
@@ -52,20 +47,20 @@ const SearchDialog = (props: DialogProps) => {
 
     return R.pipe(
       source ?? [],
-      R.groupBy((room) => {
-        if (isToday(room.updatedAt)) {
+      R.groupBy((project) => {
+        if (isToday(project.updatedAt)) {
           return t("today");
         }
-        if (isYesterday(room.updatedAt)) {
+        if (isYesterday(project.updatedAt)) {
           return t("yesterday");
         }
-        if (differenceInDays(new Date(), room.updatedAt) <= 7) {
+        if (differenceInDays(new Date(), project.updatedAt) <= 7) {
           return t("last_week");
         }
         return t("earlier");
       }),
       R.mapValues((group) =>
-        R.sortBy(group, (room) => -new Date(room.updatedAt).getTime()),
+        R.sortBy(group, (project) => -new Date(project.updatedAt).getTime()),
       ),
       R.entries(),
       R.sortBy(([label]) => order.indexOf(label)),
@@ -88,7 +83,7 @@ const SearchDialog = (props: DialogProps) => {
           <div className="relative">
             <Input
               ref={ref}
-              placeholder={t("search_chat")}
+              placeholder={t("search_project")}
               onChange={debouncer.call}
               className="border-none pl-8 shadow-none focus-visible:ring-0 md:text-base"
             />
@@ -97,7 +92,7 @@ const SearchDialog = (props: DialogProps) => {
           <hr />
           {!query && (
             <Link
-              href="/chat"
+              href="/project"
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "!px-3 h-10 w-full justify-start gap-2",
@@ -105,7 +100,7 @@ const SearchDialog = (props: DialogProps) => {
               onClick={() => props.onOpenChange?.(false)}
             >
               <Icons.squarePen className="size-5 text-muted-foreground" />
-              <div className="truncate">{t("new_chat")}</div>
+              <div className="truncate">{t("new_project")}</div>
             </Link>
           )}
         </div>
@@ -129,18 +124,18 @@ const SearchDialog = (props: DialogProps) => {
                   <p className="px-3 font-semibold text-muted-foreground text-xs">
                     {key}
                   </p>
-                  {value.map((room) => (
+                  {value.map((project) => (
                     <Link
-                      key={room.id}
-                      href={`/chat/${room.id}`}
+                      key={project.id}
+                      href={`/project/${project.id}`}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
                         "!px-3 h-10 w-full justify-start gap-2",
                       )}
                       onClick={() => props.onOpenChange?.(false)}
                     >
-                      <Icons.chat className="size-5 text-muted-foreground" />
-                      <div className="truncate">{room.name}</div>
+                      <Icons.folder className="size-5 text-muted-foreground" />
+                      <div className="truncate">{project.name}</div>
                     </Link>
                   ))}
                 </div>

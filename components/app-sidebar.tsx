@@ -8,6 +8,14 @@ import SearchDialog from "@/components/search-dialog";
 import ShareDialog from "@/components/share-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -21,8 +29,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useDialog } from "@/hooks/use-dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import type { Room, User } from "@prisma/client";
+import { cn, fetcher } from "@/lib/utils";
+import type { Project, User } from "@prisma/client";
 import { differenceInDays, isToday, isYesterday } from "date-fns";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -30,64 +38,49 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { useMemo } from "react";
 import * as R from "remeda";
 import useSWR from "swr";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 
 interface DialogPayload {
   search: undefined;
-  rename: { name: string; roomId: string };
-  share: { roomId: string };
-  delete: { roomId: string };
+  rename: { name: string; projectId: string };
+  share: { projectId: string };
+  delete: { projectId: string };
 }
 
 interface AppSidebarProps {
   user: Pick<User, "name" | "email" | "image">;
-  rooms: Room[];
+  projects: Project[];
 }
 
-const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
-  const t = useTranslations("chat");
+const AppSidebar = ({ user, projects }: AppSidebarProps) => {
+  const t = useTranslations("project");
   const segment = useSelectedLayoutSegment();
   const isMobile = useIsMobile();
 
   const { open, state, getDialogProps } = useDialog<DialogPayload>();
 
-  const key = "/api/rooms";
-
-  const fetcher = async (url: string) => {
-    const response = await fetch(url);
-    return await response.json();
-  };
-
-  const { data } = useSWR<Room[]>(key, fetcher, {
-    fallbackData: rooms,
+  const { data } = useSWR<Project[]>("/api/projects", fetcher, {
+    fallbackData: projects,
   });
 
   const result = useMemo(() => {
     const order = [t("today"), t("yesterday"), t("last_week"), t("earlier")];
 
     return R.pipe(
-      R.groupBy(data ?? [], (room) => {
-        if (isToday(room.updatedAt)) {
+      R.groupBy(data ?? [], (project) => {
+        if (isToday(project.updatedAt)) {
           return t("today");
         }
-        if (isYesterday(room.updatedAt)) {
+        if (isYesterday(project.updatedAt)) {
           return t("yesterday");
         }
-        if (differenceInDays(new Date(), room.updatedAt) <= 7) {
+        if (differenceInDays(new Date(), project.updatedAt) <= 7) {
           return t("last_week");
         }
 
         return t("earlier");
       }),
       R.mapValues((group) =>
-        R.sortBy(group, (room) => -new Date(room.updatedAt).getTime()),
+        R.sortBy(group, (project) => -new Date(project.updatedAt).getTime()),
       ),
       R.entries(),
       R.sortBy(([label]) => order.indexOf(label)),
@@ -106,7 +99,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
               </div>
             </Link>
             <Link
-              href="/chat"
+              href="/project"
               className={cn(
                 buttonVariants({ variant: "ghost", size: "icon" }),
                 "rounded-full",
@@ -121,9 +114,9 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
             <SidebarMenu className="space-y-2">
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/chat">
+                  <Link href="/project">
                     <Icons.squarePen />
-                    {t("new_chat")}
+                    {t("new_project")}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -137,7 +130,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                   }
                 >
                   <Icons.search />
-                  {t("search_chat")}
+                  {t("search_project")}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -159,7 +152,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                               isActive={isActive}
                               className="group/button data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground [&_svg:not([class*='size-'])]:size-4"
                             >
-                              <Link href={`/chat/${item.id}`}>
+                              <Link href={`/project/${item.id}`}>
                                 {item.name}
                                 <DropdownMenuTrigger asChild>
                                   <Icons.ellipsis className="ml-auto opacity-0 transition-opacity group-hover/button:opacity-100 data-[state=open]:opacity-100" />
@@ -179,7 +172,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                                       type: "rename",
                                       data: {
                                         name: item.name,
-                                        roomId: item.id,
+                                        projectId: item.id,
                                       },
                                     })
                                   }
@@ -191,7 +184,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                                   onSelect={() =>
                                     open({
                                       type: "share",
-                                      data: { roomId: item.id },
+                                      data: { projectId: item.id },
                                     })
                                   }
                                 >
@@ -209,7 +202,7 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
                                 onSelect={() =>
                                   open({
                                     type: "delete",
-                                    data: { roomId: item.id },
+                                    data: { projectId: item.id },
                                   })
                                 }
                               >
@@ -233,16 +226,16 @@ const AppSidebar = ({ user, rooms }: AppSidebarProps) => {
       <SearchDialog {...getDialogProps("search")} />
       <RenameDialog
         {...getDialogProps("rename")}
-        roomId={state.type === "rename" ? state.data.roomId : ""}
+        projectId={state.type === "rename" ? state.data.projectId : ""}
         name={state.type === "rename" ? state.data.name : ""}
       />
       <ShareDialog
         {...getDialogProps("share")}
-        roomId={state.type === "share" ? state.data.roomId : ""}
+        projectId={state.type === "share" ? state.data.projectId : ""}
       />
       <DeleteDialog
         {...getDialogProps("delete")}
-        roomId={state.type === "delete" ? state.data.roomId : ""}
+        projectId={state.type === "delete" ? state.data.projectId : ""}
       />
     </>
   );

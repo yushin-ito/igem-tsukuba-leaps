@@ -48,7 +48,7 @@ model User {
   updatedAt     DateTime  @default(now()) @map("updated_at")
   accounts      Account[]
   sessions      Session[]
-  rooms         Room[]
+  projects      Project[]
 
   @@map("users")
 }
@@ -62,45 +62,14 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-model Room {
+model Project {
   id        String   @id @default(cuid())
   userId    String   @map("user_id")
   name      String
-  step      Step     @default(loader)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-  fileKey  String?
-
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages Message[]
-
-  @@map("rooms")
-}
-
-model Message {
-  id        String   @id @default(cuid())
-  roomId    String   @map("room_id")
-  role      Role
-  text      String
-  read      Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("messages")
-}
-
-enum Role {
-  user
-  system
-}
-
-enum Step {
-  loader
-  sampler
-  predictor
-  screener
-  generator
-  runner
+  @@map("projects")
 }
