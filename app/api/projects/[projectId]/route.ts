@@ -1,15 +1,9 @@
 import { unauthorized } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-
-const contextSchema = z.object({
-  params: z.object({
-    projectId: z.string(),
-  }),
-});
 
 const bodySchema = z.object({
   name: z.string().min(3).max(128).optional(),
@@ -17,7 +11,7 @@ const bodySchema = z.object({
 
 export const DELETE = async (
   _req: NextRequest,
-  context: z.infer<typeof contextSchema>,
+  { params }: { params: Promise<{ projectId: string }> },
 ) => {
   try {
     const session = await auth();
@@ -26,7 +20,6 @@ export const DELETE = async (
       unauthorized();
     }
 
-    const { params } = contextSchema.parse(context);
     const { projectId } = await params;
 
     const project = await db.project.delete({
@@ -50,7 +43,7 @@ export const DELETE = async (
 
 export const PATCH = async (
   req: Request,
-  context: z.infer<typeof contextSchema>,
+  { params }: { params: Promise<{ projectId: string }> },
 ) => {
   try {
     const session = await auth();
@@ -59,7 +52,6 @@ export const PATCH = async (
       unauthorized();
     }
 
-    const { params } = contextSchema.parse(context);
     const { projectId } = await params;
 
     const json = await req.json();
