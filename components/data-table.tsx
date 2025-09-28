@@ -34,7 +34,7 @@ const DataTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
-  const t = useTranslations("project.step1");
+  const t = useTranslations("project.step2");
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");

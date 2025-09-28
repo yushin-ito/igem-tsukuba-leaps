@@ -13,50 +13,62 @@ export const tableSchema = z
   .object({
     headers: z.array(z.string()),
   })
-  .refine(({ headers }) => headers[0] === "id", {
-    path: ["headers", 0],
-  })
-  .refine(({ headers }) => headers[1] === "sequence", {
-    path: ["headers", 1],
-  });
+  .refine(({ headers }) => headers[0] === "id")
+  .refine(({ headers }) => headers[1] === "sequence");
 
-export const projectSchema = z
-  .object({
-    text: z.string(),
-    config: configSchema,
-  })
+export const confirmSchema = z.object({
+  question: z.object({
+    toxin: z.enum(["yes", "no"], { error: "required" }),
+    pathogen: z.enum(["yes", "no"], { error: "required" }),
+    virus: z.enum(["yes", "no"], { error: "required" }),
+  }),
+  consent: z.object({
+    compliance: z.literal(true, { error: "required" }),
+    disclaimer: z.literal(true, { error: "required" }),
+    warranty: z.literal(true, { error: "required" }),
+  }),
+});
+
+export const datasetSchema = z
+  .string()
   .refine(
-    ({ text }) => {
-      const { rows } = parseDSV(text);
+    (value) => {
+      const { rows } = parseDSV(value);
       return rows.length >= 40;
     },
-    { message: "too_few_rows", path: ["text"] },
+    { message: "too_few_rows" },
   )
   .refine(
-    ({ text }) => {
-      const { headers } = parseDSV(text);
+    (value) => {
+      const { headers } = parseDSV(value);
       return headers[0] === "id";
     },
-    { message: "required_id", path: ["text"] },
+    { message: "required_id" },
   )
   .refine(
-    ({ text }) => {
-      const { headers } = parseDSV(text);
+    (value) => {
+      const { headers } = parseDSV(value);
       return headers[1] === "sequence";
     },
-    { message: "required_sequence", path: ["text"] },
+    { message: "required_sequence" },
   )
   .refine(
-    ({ text }) => {
-      const { headers } = parseDSV(text);
+    (value) => {
+      const { headers } = parseDSV(value);
       return headers.length - 2 >= 1;
     },
-    { message: "too_few_values", path: ["text"] },
+    { message: "too_few_headers" },
   )
   .refine(
-    ({ text }) => {
-      const { headers } = parseDSV(text);
+    (value) => {
+      const { headers } = parseDSV(value);
       return headers.length - 2 <= 5;
     },
-    { message: "too_many_values", path: ["text"] },
+    { message: "too_many_headers" },
   );
+
+export const projectSchema = z.object({
+  confirm: confirmSchema,
+  text: datasetSchema,
+  config: configSchema,
+});

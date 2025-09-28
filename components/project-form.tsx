@@ -36,15 +36,17 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { parseDSV } from "@/lib/utils";
-import { projectSchema, tableSchema } from "@/schemas/project";
+import { confirmSchema, projectSchema, tableSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { Project } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import {
   type ChangeEvent,
   Fragment,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
 } from "react";
@@ -53,6 +55,8 @@ import * as R from "remeda";
 import { toast } from "sonner";
 import useSWRMutation from "swr/mutation";
 import type { z } from "zod/v4";
+import { Checkbox } from "./ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 interface ProjectFormProps {
   project: Pick<Project, "id" | "name">;
@@ -108,14 +112,12 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             parallel: { top_k: "20" },
           },
           value2: {
-            mode: "min",
+            mode: "max",
             series: { top_p: "0.9" },
             parallel: { top_k: "20" },
           },
           value3: {
-            mode: "range",
-            lower: "0",
-            upper: "100",
+            mode: "max",
             series: { top_p: "0.9" },
             parallel: { top_k: "20" },
           },
@@ -126,6 +128,9 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       },
     },
   });
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   const text = watch("text");
 
@@ -355,14 +360,138 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       <Accordion
         type="multiple"
         className="space-y-4"
-        defaultValue={["item-1", "item-2"]}
+        defaultValue={["item-1", "item-2", "item-3"]}
       >
-        <AccordionItem value="item-1" className="space-y-4">
+        <AccordionItem value="item-1" className="space-y-2">
           <AccordionTrigger className="items-center hover:no-underline">
             <div className="space-y-1 px-1">
               <h2 className="font-semibold md:text-lg">{t("step1.title")}</h2>
               <p className="font-normal text-muted-foreground text-sm">
                 {t("step1.description")}
+              </p>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="space-y-8 p-1 pb-8">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <div className="font-medium text-base">
+                    {t("step1.question.title")}
+                  </div>
+                  <div className="text-muted-foreground text-sm">
+                    {t("step1.question.description")}
+                  </div>
+                </div>
+                <hr />
+              </div>
+              <ol className="list-decimal space-y-6 px-4">
+                {R.keys(confirmSchema.shape.question.shape).map(
+                  (item, index) => (
+                    <li key={index.toString()} className="space-y-3">
+                      <div>
+                        {t.rich(`step1.question.items.${item}`, {
+                          link: (chunks) => <Link href="">{chunks}</Link>,
+                        })}
+                      </div>
+                      {/* RadioGroup は Controller 維持 */}
+                      <Controller
+                        name={`confirm.question.${item}`}
+                        control={control}
+                        render={({
+                          field: { value, onChange },
+                          fieldState: { error },
+                        }) => (
+                          <div className="space-y-2">
+                            <RadioGroup value={value} onValueChange={onChange}>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="yes" id="yes" />
+                                <Label htmlFor="yes" className="font-normal">
+                                  {t("step1.question.yes")}
+                                </Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="no" id="no" />
+                                <Label htmlFor="no" className="font-normal">
+                                  {t("step1.question.no")}
+                                </Label>
+                              </div>
+                            </RadioGroup>
+                            {error?.message && (
+                              <span className="text-destructive text-xs">
+                                {/* @ts-expect-error */}
+                                {t(`step1.question.${error.message}`)}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      />
+                    </li>
+                  ),
+                )}
+              </ol>
+            </div>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <div className="font-medium text-base">
+                    {t("step1.consent.title")}
+                  </div>
+                  <div className="text-muted-foreground text-sm">
+                    {t("step1.consent.description")}
+                  </div>
+                </div>
+                <hr />
+              </div>
+              <div className="space-y-8">
+                {R.keys(confirmSchema.shape.consent.shape).map((key, index) => (
+                  <Controller
+                    key={key}
+                    name={`confirm.consent.${key}`}
+                    control={control}
+                    render={({
+                      field: { value, onChange },
+                      fieldState: { error },
+                    }) => (
+                      <div className="space-y-2">
+                        <div
+                          key={index.toString()}
+                          className="flex items-start space-x-2"
+                        >
+                          <Checkbox
+                            id={key}
+                            checked={value}
+                            onCheckedChange={onChange}
+                          />
+                          <div className="space-y-2">
+                            <Label htmlFor={key}>
+                              {t(`step1.consent.items.${key}.title`)}
+                            </Label>
+                            <p className="text-muted-foreground text-sm">
+                              {t(`step1.consent.items.${key}.description`)}
+                            </p>
+                          </div>
+                        </div>
+                        {error?.message && (
+                          <span className="text-destructive text-xs">
+                            {/* @ts-expect-error */}
+                            {t(`step1.consent.${error.message}`)}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-2" className="space-y-4">
+          <AccordionTrigger className="items-center hover:no-underline">
+            <div className="space-y-1 px-1">
+              <h2 className="font-semibold md:text-lg">{t("step2.title")}</h2>
+              <p className="font-normal text-muted-foreground text-sm">
+                {t("step2.description")}
               </p>
             </div>
           </AccordionTrigger>
@@ -403,19 +532,17 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                 </div>
                 {errors.text && (
                   <span className="px-1 text-destructive text-xs">
-                    {t(
-                      // @ts-expect-error
-                      `step1.${errors.text.message}`,
-                    )}
+                    {/* @ts-expect-error */}
+                    {t(`step2.${errors.text.message}`)}
                   </span>
                 )}
               </div>
               <div className="flex items-center justify-end space-x-2">
                 <Button variant="outline" onClick={() => reset()}>
-                  {t("step1.clear")}
+                  {t("step2.clear")}
                 </Button>
                 <div className={buttonVariants()}>
-                  <Label htmlFor="dataset">{t("step1.upload")}</Label>
+                  <Label htmlFor="dataset">{t("step2.upload")}</Label>
                   <Input
                     id="dataset"
                     type="file"
@@ -431,12 +558,12 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             )}
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-2" className="space-y-4">
+        <AccordionItem value="item-3" className="space-y-4">
           <AccordionTrigger className="items-center hover:no-underline">
             <div className="space-y-1 px-1">
-              <h2 className="font-semibold md:text-lg">{t("step2.title")}</h2>
+              <h2 className="font-semibold md:text-lg">{t("step3.title")}</h2>
               <p className="font-normal text-muted-foreground text-sm">
-                {t("step2.description")}
+                {t("step3.description")}
               </p>
             </div>
           </AccordionTrigger>
@@ -461,7 +588,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                       <div className="text-muted-foreground text-sm">
                         {R.entries(stats)
                           .map(([key, value]) => {
-                            return t(`step2.${key}`, {
+                            return t(`step3.${key}`, {
                               value:
                                 value == null ? "-" : formatter.format(value),
                             });
@@ -474,87 +601,107 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                       control={control}
                       render={({ field: { value, onChange } }) => {
                         return (
-                          <div className="flex flex-col items-center space-y-2">
-                            <Select
-                              value={value.mode}
-                              onValueChange={(mode) => {
-                                if (mode === "range") {
-                                  onChange({
-                                    mode,
-                                    lower: stats.min ?? 0,
-                                    upper: stats.max ?? 100,
-                                  });
-                                } else {
-                                  onChange({ mode });
-                                }
-                              }}
-                              disabled={headers.slice(2).length < 1}
-                            >
-                              <SelectTrigger className="w-32">
-                                <SelectValue
-                                  placeholder={t("step2.direction")}
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="max">
-                                  {t("step2.maximize")}
-                                </SelectItem>
-                                <SelectItem value="min">
-                                  {t("step2.minimize")}
-                                </SelectItem>
-                                <SelectItem value="range">
-                                  {t("step2.range")}
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                            {value.mode === "range" ? (
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <div className="text-muted-foreground text-sm hover:text-foreground">{`${value.lower} - ${value.upper}`}</div>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-80">
-                                  <div className="grid gap-2">
-                                    <div className="grid grid-cols-3 items-center gap-12">
-                                      <Label htmlFor="upper">
-                                        {t("step2.upper")}
-                                      </Label>
-                                      <Input
-                                        id="upper"
-                                        type="number"
-                                        value={value.upper}
-                                        onChange={(event) => {
-                                          onChange({
-                                            ...value,
-                                            upper: event.target.value,
-                                          });
-                                        }}
-                                        className="col-span-2 h-8"
-                                      />
+                          <div className="flex flex-col items-end space-y-2">
+                            <div className="flex flex-col items-center space-y-2">
+                              <Select
+                                value={value.mode}
+                                onValueChange={(mode) => {
+                                  if (mode === "range") {
+                                    onChange({
+                                      mode,
+                                      lower: stats.min ?? 0,
+                                      upper: stats.max ?? 100,
+                                    });
+                                  } else {
+                                    onChange({ mode });
+                                  }
+                                }}
+                                disabled={headers.slice(2).length < 1}
+                              >
+                                <SelectTrigger className="w-32">
+                                  <SelectValue
+                                    placeholder={t("step3.direction")}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="max">
+                                    {t("step3.maximize")}
+                                  </SelectItem>
+                                  <SelectItem value="min">
+                                    {t("step3.minimize")}
+                                  </SelectItem>
+                                  <SelectItem value="range">
+                                    {t("step3.range")}
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                              {value.mode === "range" ? (
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <div className="text-muted-foreground text-sm hover:text-foreground">{`${value.lower} - ${value.upper}`}</div>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-80">
+                                    <div className="grid gap-2">
+                                      <div className="grid grid-cols-3 items-center gap-12">
+                                        <Label htmlFor="upper">
+                                          {t("step3.upper")}
+                                        </Label>
+                                        <Input
+                                          id="upper"
+                                          type="number"
+                                          value={value.upper}
+                                          onChange={(event) => {
+                                            onChange({
+                                              ...value,
+                                              upper: event.target.value,
+                                            });
+                                          }}
+                                          className="col-span-2 h-8"
+                                        />
+                                      </div>
+                                      <div className="grid grid-cols-3 items-center gap-12">
+                                        <Label htmlFor="lower">
+                                          {t("step3.lower")}
+                                        </Label>
+                                        <Input
+                                          id="lower"
+                                          type="number"
+                                          value={value.lower}
+                                          onChange={(event) =>
+                                            onChange({
+                                              ...value,
+                                              lower: event.target.value,
+                                            })
+                                          }
+                                          className="col-span-2 h-8"
+                                        />
+                                      </div>
                                     </div>
-                                    <div className="grid grid-cols-3 items-center gap-12">
-                                      <Label htmlFor="lower">
-                                        {t("step2.lower")}
-                                      </Label>
-                                      <Input
-                                        id="lower"
-                                        type="number"
-                                        value={value.lower}
-                                        onChange={(event) =>
-                                          onChange({
-                                            ...value,
-                                            lower: event.target.value,
-                                          })
-                                        }
-                                        className="col-span-2 h-8"
-                                      />
-                                    </div>
-                                  </div>
-                                </PopoverContent>
-                              </Popover>
-                            ) : (
-                              <div className="text-muted-foreground text-sm capitalize">
-                                {`${value.mode}imize`}
-                              </div>
+                                  </PopoverContent>
+                                </Popover>
+                              ) : (
+                                <div className="text-muted-foreground text-sm capitalize">
+                                  {`${value.mode}imize`}
+                                </div>
+                              )}
+                            </div>
+                            {/* @ts-expect-error */}
+                            {errors.config?.evaluator?.[header]?.upper && (
+                              <span className="text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step3.${errors.config?.evaluator?.[header]?.upper.message}`,
+                                )}
+                              </span>
+                            )}
+                            {/* @ts-expect-error */}
+                            {errors.config?.evaluator?.[header]?.lower && (
+                              <span className="text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step3.${errors.config?.evaluator?.[header]?.lower.message}`,
+                                )}
+                              </span>
                             )}
                           </div>
                         );
@@ -567,12 +714,12 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
             })}
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-3" className="space-y-4">
+        <AccordionItem value="item-4" className="space-y-4">
           <AccordionTrigger className="items-center hover:no-underline">
             <div className="space-y-1 px-1">
-              <h2 className="font-semibold md:text-lg">{t("step3.title")}</h2>
+              <h2 className="font-semibold md:text-lg">{t("step4.title")}</h2>
               <p className="font-normal text-muted-foreground text-sm">
-                {t("step3.description")}
+                {t("step4.description")}
               </p>
             </div>
           </AccordionTrigger>
@@ -581,130 +728,120 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
               <div className="flex items-center justify-between space-x-4 px-2">
                 <div className="space-y-1">
                   <div className="font-medium text-base">
-                    {t("step3.sampler.title")}
+                    {t("step4.sampler.title")}
                   </div>
                   <div className="text-muted-foreground text-sm">
-                    {t("step3.sampler.description")}
+                    {t("step4.sampler.description")}
                   </div>
                 </div>
-                <Controller
-                  name="config.sampler"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline">
-                          <Icons.settings />
-                          {t("step3.configure")}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <div className="space-y-8">
-                          <DialogHeader>
-                            <DialogTitle>
-                              {t("step3.sampler.title")}
-                            </DialogTitle>
-                            <DialogDescription>
-                              {t("step3.sampler.description")}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="grid gap-4">
-                            <div className="grid gap-3">
-                              <Label htmlFor="num-shuffles">
-                                {t("step3.sampler.num_shuffles.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="num-shuffles"
-                                  type="number"
-                                  value={value.num_shuffles}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      num_shuffles: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.sampler?.num_shuffles && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.sampler.num_shuffles.${errors.config.sampler.num_shuffles.message}`,
-                                    )}
-                                  </span>
+                <Dialog>
+                  <div className="flex flex-col items-end space-y-2">
+                    <DialogTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings />
+                        {t("step4.configure")}
+                      </Button>
+                    </DialogTrigger>
+                    {errors.config?.sampler && (
+                      <span className="text-destructive text-xs">
+                        {t("step4.error")}
+                      </span>
+                    )}
+                  </div>
+                  <DialogContent>
+                    <div className="space-y-8">
+                      <DialogHeader>
+                        <DialogTitle>{t("step4.sampler.title")}</DialogTitle>
+                        <DialogDescription>
+                          {t("step4.sampler.description")}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <div className="grid gap-3">
+                          <Label htmlFor="num-shuffles">
+                            {t("step4.sampler.num_shuffles.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="num-shuffles"
+                              type="number"
+                              defaultValue={watch(
+                                "config.sampler.num_shuffles",
+                              )}
+                              {...register("config.sampler.num_shuffles")}
+                            />
+                            {errors.config?.sampler?.num_shuffles && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.sampler.num_shuffles.${errors.config.sampler.num_shuffles.message}`,
                                 )}
-                              </div>
-                            </div>
-                            <div className="grid gap-3">
-                              <Label htmlFor="shuffle-rate">
-                                {t("step3.sampler.shuffle_rate.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="shuffle-rate"
-                                  type="number"
-                                  step="0.01"
-                                  value={value.shuffle_rate}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      shuffle_rate: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.sampler?.shuffle_rate && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.sampler.shuffle_rate.${errors.config.sampler.shuffle_rate.message}`,
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <div className="grid gap-3">
-                              <Label htmlFor="window-sizes">
-                                {t("step3.sampler.window_sizes.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="window-sizes"
-                                  placeholder="1, 3, 5"
-                                  value={value.window_sizes}
-                                  onChange={(event) => {
-                                    onChange({
-                                      ...value,
-                                      window_sizes: event.target.value,
-                                    });
-                                  }}
-                                />
-                                {errors.config?.sampler?.window_sizes && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.sampler.window_sizes.${errors.config.sampler.window_sizes.message}`,
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                              </span>
+                            )}
                           </div>
-                          <DialogFooter>
-                            <Button
-                              variant="outline"
-                              onClick={() => resetField("config.sampler")}
-                            >
-                              {t("step3.clear")}
-                            </Button>
-                            <DialogClose asChild>
-                              <Button>{t("step3.done")}</Button>
-                            </DialogClose>
-                          </DialogFooter>
                         </div>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                />
+                        <div className="grid gap-3">
+                          <Label htmlFor="shuffle-rate">
+                            {t("step4.sampler.shuffle_rate.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="shuffle-rate"
+                              type="number"
+                              step="0.01"
+                              defaultValue={watch(
+                                "config.sampler.shuffle_rate",
+                              )}
+                              {...register("config.sampler.shuffle_rate")}
+                            />
+                            {errors.config?.sampler?.shuffle_rate && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.sampler.shuffle_rate.${errors.config.sampler.shuffle_rate.message}`,
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="grid gap-3">
+                          <Label htmlFor="window-sizes">
+                            {t("step4.sampler.window_sizes.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="window-sizes"
+                              placeholder="1, 3, 5"
+                              defaultValue={watch(
+                                "config.sampler.window_sizes",
+                              )}
+                              {...register("config.sampler.window_sizes")}
+                            />
+                            {errors.config?.sampler?.window_sizes && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.sampler.window_sizes.${errors.config.sampler.window_sizes.message}`,
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => resetField("config.sampler")}
+                        >
+                          {t("step4.clear")}
+                        </Button>
+                        <DialogClose asChild>
+                          <Button>{t("step4.done")}</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               <hr />
             </div>
@@ -712,25 +849,32 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
               <div className="flex items-center justify-between space-x-4 px-2">
                 <div className="space-y-1">
                   <div className="font-medium text-base">
-                    {t("step3.predictor.title")}
+                    {t("step4.predictor.title")}
                   </div>
                   <div className="text-muted-foreground text-sm">
-                    {t("step3.predictor.description")}
+                    {t("step4.predictor.description")}
                   </div>
                 </div>
                 <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline">
-                      <Icons.settings />
-                      {t("step3.configure")}
-                    </Button>
-                  </DialogTrigger>
+                  <div className="flex flex-col items-end space-y-2">
+                    <DialogTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings />
+                        {t("step4.configure")}
+                      </Button>
+                    </DialogTrigger>
+                    {errors.config?.predictor && (
+                      <span className="text-destructive text-xs">
+                        {t("step4.error")}
+                      </span>
+                    )}
+                  </div>
                   <DialogContent className="px-0">
                     <div className="space-y-8">
                       <DialogHeader className="px-6">
-                        <DialogTitle>{t("step3.predictor.title")}</DialogTitle>
+                        <DialogTitle>{t("step4.predictor.title")}</DialogTitle>
                         <DialogDescription>
-                          {t("step3.predictor.description")}
+                          {t("step4.predictor.description")}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="h-[240px] space-y-12 overflow-y-auto px-6">
@@ -757,7 +901,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                   <div className="grid gap-3">
                                     <Label htmlFor="destruct_per_samples">
                                       {t(
-                                        "step3.predictor.destruct_per_samples.title",
+                                        "step4.predictor.destruct_per_samples.title",
                                       )}
                                     </Label>
                                     <div className="space-y-1">
@@ -778,7 +922,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                         <span className="px-1 text-destructive text-xs">
                                           {t(
                                             // @ts-expect-error
-                                            `step3.predictor.destruct_per_samples.${errors.config.predictor[header].destruct_per_samples.message}`,
+                                            `step4.predictor.destruct_per_samples.${errors.config.predictor[header].destruct_per_samples.message}`,
                                           )}
                                         </span>
                                       )}
@@ -787,7 +931,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                   <div className="grid gap-3">
                                     <Label htmlFor="num-destructions">
                                       {t(
-                                        "step3.predictor.num_destructions.title",
+                                        "step4.predictor.num_destructions.title",
                                       )}
                                     </Label>
                                     <div className="space-y-1">
@@ -808,7 +952,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                         <span className="px-1 text-destructive text-xs">
                                           {t(
                                             // @ts-expect-error
-                                            `step3.predictor.num_destructions.${errors.config.predictor[header].num_destructions.message}`,
+                                            `step4.predictor.num_destructions.${errors.config.predictor[header].num_destructions.message}`,
                                           )}
                                         </span>
                                       )}
@@ -817,7 +961,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                   <div className="grid gap-3">
                                     <Label htmlFor="mutate-per-samples">
                                       {t(
-                                        "step3.predictor.mutate_per_samples.title",
+                                        "step4.predictor.mutate_per_samples.title",
                                       )}
                                     </Label>
                                     <div className="space-y-1">
@@ -838,7 +982,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                         <span className="px-1 text-destructive text-xs">
                                           {t(
                                             // @ts-expect-error
-                                            `step3.predictor.mutate_per_samples.${errors.config.predictor[header].mutate_per_samples.message}`,
+                                            `step4.predictor.mutate_per_samples.${errors.config.predictor[header].mutate_per_samples.message}`,
                                           )}
                                         </span>
                                       )}
@@ -846,7 +990,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                   </div>
                                   <div className="grid gap-3">
                                     <Label htmlFor="num-mutations">
-                                      {t("step3.predictor.num_mutations.title")}
+                                      {t("step4.predictor.num_mutations.title")}
                                     </Label>
                                     <div className="space-y-1">
                                       <Input
@@ -865,7 +1009,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                         <span className="px-1 text-destructive text-xs">
                                           {t(
                                             // @ts-expect-error
-                                            `step3.predictor.num_mutations.${errors.config.predictor[header].num_mutations.message}`,
+                                            `step4.predictor.num_mutations.${errors.config.predictor[header].num_mutations.message}`,
                                           )}
                                         </span>
                                       )}
@@ -882,10 +1026,10 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           variant="outline"
                           onClick={() => resetField("config.predictor")}
                         >
-                          {t("step3.clear")}
+                          {t("step4.clear")}
                         </Button>
                         <DialogClose asChild>
-                          <Button>{t("step3.done")}</Button>
+                          <Button>{t("step4.done")}</Button>
                         </DialogClose>
                       </DialogFooter>
                     </div>
@@ -898,25 +1042,32 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
               <div className="flex items-center justify-between space-x-4 px-2">
                 <div className="space-y-1">
                   <div className="font-medium text-base">
-                    {t("step3.evaluator.title")}
+                    {t("step4.evaluator.title")}
                   </div>
                   <div className="text-muted-foreground text-sm">
-                    {t("step3.evaluator.description")}
+                    {t("step4.evaluator.description")}
                   </div>
                 </div>
                 <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline">
-                      <Icons.settings />
-                      {t("step3.configure")}
-                    </Button>
-                  </DialogTrigger>
+                  <div className="flex flex-col items-end space-y-2">
+                    <DialogTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings />
+                        {t("step4.configure")}
+                      </Button>
+                    </DialogTrigger>
+                    {errors.config?.evaluator && (
+                      <span className="text-destructive text-xs">
+                        {t("step4.error")}
+                      </span>
+                    )}
+                  </div>
                   <DialogContent className="px-0">
                     <div className="space-y-8">
                       <DialogHeader className="px-6">
-                        <DialogTitle>{t("step3.evaluator.title")}</DialogTitle>
+                        <DialogTitle>{t("step4.evaluator.title")}</DialogTitle>
                         <DialogDescription>
-                          {t("step3.evaluator.description")}
+                          {t("step4.evaluator.description")}
                         </DialogDescription>
                       </DialogHeader>
                       <div className="h-[240px] space-y-12 overflow-y-auto px-6">
@@ -944,7 +1095,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                     <div className="grid gap-4">
                                       <div className="grid gap-3">
                                         <Label htmlFor={strategy}>
-                                          {t(`step3.evaluator.${strategy}`)}
+                                          {t(`step4.evaluator.${strategy}`)}
                                         </Label>
                                         <Select
                                           value={
@@ -976,10 +1127,10 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                           </SelectTrigger>
                                           <SelectContent>
                                             <SelectItem value="top_p">
-                                              {t("step3.evaluator.top_p.title")}
+                                              {t("step4.evaluator.top_p.title")}
                                             </SelectItem>
                                             <SelectItem value="top_k">
-                                              {t("step3.evaluator.top_k.title")}
+                                              {t("step4.evaluator.top_k.title")}
                                             </SelectItem>
                                           </SelectContent>
                                         </Select>
@@ -987,7 +1138,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                       {"top_p" in value ? (
                                         <div className="grid gap-2">
                                           <Label htmlFor="top-p">
-                                            {t("step3.evaluator.top_p.title")}
+                                            {t("step4.evaluator.top_p.title")}
                                           </Label>
                                           <div className="space-y-1">
                                             <Input
@@ -1010,7 +1161,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                               <span className="px-1 text-destructive text-xs">
                                                 {t(
                                                   // @ts-expect-error
-                                                  `step3.evaluator.top_p.${errors.config.evaluator[header][strategy].top_p.message}`,
+                                                  `step4.evaluator.top_p.${errors.config.evaluator[header][strategy].top_p.message}`,
                                                 )}
                                               </span>
                                             )}
@@ -1019,7 +1170,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                       ) : (
                                         <div className="grid gap-2">
                                           <Label htmlFor="top-k">
-                                            {t("step3.evaluator.top_k.title")}
+                                            {t("step4.evaluator.top_k.title")}
                                           </Label>
                                           <div className="space-y-1">
                                             <Input
@@ -1040,7 +1191,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                               <span className="px-1 text-destructive text-xs">
                                                 {t(
                                                   // @ts-expect-error
-                                                  `step3.evaluator.top_k.${errors.config.evaluator[header][strategy].top_k.message}`,
+                                                  `step4.evaluator.top_k.${errors.config.evaluator[header][strategy].top_k.message}`,
                                                 )}
                                               </span>
                                             )}
@@ -1060,10 +1211,10 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           variant="outline"
                           onClick={() => resetField("config.evaluator")}
                         >
-                          {t("step3.clear")}
+                          {t("step4.clear")}
                         </Button>
                         <DialogClose asChild>
-                          <Button>{t("step3.done")}</Button>
+                          <Button>{t("step4.done")}</Button>
                         </DialogClose>
                       </DialogFooter>
                     </div>
@@ -1076,102 +1227,93 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
               <div className="flex items-center justify-between space-x-4 px-2">
                 <div className="space-y-1">
                   <div className="font-medium text-base">
-                    {t("step3.generator.title")}
+                    {t("step4.generator.title")}
                   </div>
                   <div className="text-muted-foreground text-sm">
-                    {t("step3.generator.description")}
+                    {t("step4.generator.description")}
                   </div>
                 </div>
-                <Controller
-                  name="config.generator"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline">
-                          <Icons.settings />
-                          {t("step3.configure")}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <div className="space-y-8">
-                          <DialogHeader>
-                            <DialogTitle>
-                              {t("step3.generator.title")}
-                            </DialogTitle>
-                            <DialogDescription>
-                              {t("step3.generator.description")}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="grid gap-4">
-                            <div className="grid gap-3">
-                              <Label htmlFor="max-new-token">
-                                {t("step3.generator.max_new_token.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="max-new-token"
-                                  type="number"
-                                  value={value.max_new_token}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      max_new_token: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.generator?.max_new_token && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.generator.max_new_token.${errors.config.generator.max_new_token.message}`,
-                                    )}
-                                  </span>
+                <Dialog>
+                  <div className="flex flex-col items-end space-y-2">
+                    <DialogTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings />
+                        {t("step4.configure")}
+                      </Button>
+                    </DialogTrigger>
+                    {errors.config?.generator && (
+                      <span className="text-destructive text-xs">
+                        {t("step4.error")}
+                      </span>
+                    )}
+                  </div>
+                  <DialogContent>
+                    <div className="space-y-8">
+                      <DialogHeader>
+                        <DialogTitle>{t("step4.generator.title")}</DialogTitle>
+                        <DialogDescription>
+                          {t("step4.generator.description")}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <div className="grid gap-3">
+                          <Label htmlFor="max-new-token">
+                            {t("step4.generator.max_new_token.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="max-new-token"
+                              type="number"
+                              defaultValue={watch(
+                                "config.generator.max_new_token",
+                              )}
+                              {...register("config.generator.max_new_token")}
+                            />
+                            {errors.config?.generator?.max_new_token && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.generator.max_new_token.${errors.config.generator.max_new_token.message}`,
                                 )}
-                              </div>
-                            </div>
-                            <div className="grid gap-3">
-                              <Label htmlFor="prompt">
-                                {t("step3.generator.prompt.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="prompt"
-                                  value={value.prompt}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      prompt: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.generator?.prompt && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.generator.prompt.${errors.config.generator.prompt.message}`,
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                              </span>
+                            )}
                           </div>
-                          <DialogFooter>
-                            <Button
-                              variant="outline"
-                              onClick={() => resetField("config.generator")}
-                            >
-                              {t("step3.clear")}
-                            </Button>
-                            <DialogClose asChild>
-                              <Button>{t("step3.done")}</Button>
-                            </DialogClose>
-                          </DialogFooter>
                         </div>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                />
+                        <div className="grid gap-3">
+                          <Label htmlFor="prompt">
+                            {t("step4.generator.prompt.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="prompt"
+                              defaultValue={watch("config.generator.prompt")}
+                              {...register("config.generator.prompt")}
+                            />
+                            {errors.config?.generator?.prompt && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.generator.prompt.${errors.config.generator.prompt.message}`,
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => resetField("config.generator")}
+                        >
+                          {t("step4.clear")}
+                        </Button>
+                        <DialogClose asChild>
+                          <Button>{t("step4.done")}</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               <hr />
             </div>
@@ -1179,206 +1321,188 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
               <div className="flex items-center justify-between space-x-4 px-2">
                 <div className="space-y-1">
                   <div className="font-medium text-base">
-                    {t("step3.early_stopper.title")}
+                    {t("step4.early_stopper.title")}
                   </div>
                   <div className="text-muted-foreground text-sm">
-                    {t("step3.early_stopper.description")}
+                    {t("step4.early_stopper.description")}
                   </div>
                 </div>
-                <Controller
-                  name="config.early_stopper"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline">
-                          <Icons.settings />
-                          {t("step3.configure")}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <div className="space-y-8">
-                          <DialogHeader>
-                            <DialogTitle>
-                              {t("step3.early_stopper.title")}
-                            </DialogTitle>
-                            <DialogDescription>
-                              {t("step3.early_stopper.description")}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="grid gap-4">
-                            <div className="grid gap-3">
-                              <Label htmlFor="num-samples">
-                                {t("step3.early_stopper.num_samples.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="num-samples"
-                                  type="number"
-                                  value={value.num_samples}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      num_samples: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.early_stopper?.num_samples && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.early_stopper.num_samples.${errors.config.early_stopper.num_samples.message}`,
-                                    )}
-                                  </span>
+                <Dialog>
+                  <div className="flex flex-col items-end space-y-2">
+                    <DialogTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings />
+                        {t("step4.configure")}
+                      </Button>
+                    </DialogTrigger>
+                    {errors.config?.early_stopper && (
+                      <span className="text-destructive text-xs">
+                        {t("step4.error")}
+                      </span>
+                    )}
+                  </div>
+                  <DialogContent>
+                    <div className="space-y-8">
+                      <DialogHeader>
+                        <DialogTitle>
+                          {t("step4.early_stopper.title")}
+                        </DialogTitle>
+                        <DialogDescription>
+                          {t("step4.early_stopper.description")}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <div className="grid gap-3">
+                          <Label htmlFor="num-samples">
+                            {t("step4.early_stopper.num_samples.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="num-samples"
+                              type="number"
+                              defaultValue={watch(
+                                "config.early_stopper.num_samples",
+                              )}
+                              {...register("config.early_stopper.num_samples")}
+                            />
+                            {errors.config?.early_stopper?.num_samples && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.early_stopper.num_samples.${errors.config.early_stopper.num_samples.message}`,
                                 )}
-                              </div>
-                            </div>
-                            <div className="grid gap-3">
-                              <Label htmlFor="patience">
-                                {t("step3.early_stopper.patience.title")}
-                              </Label>
-                              <div className="space-y-1">
-                                <Input
-                                  id="patience"
-                                  value={value.patience}
-                                  onChange={(event) =>
-                                    onChange({
-                                      ...value,
-                                      patience: event.target.value,
-                                    })
-                                  }
-                                />
-                                {errors.config?.early_stopper?.patience && (
-                                  <span className="px-1 text-destructive text-xs">
-                                    {t(
-                                      // @ts-expect-error
-                                      `step3.early_stopper.patience.${errors.config.early_stopper.patience.message}`,
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                              </span>
+                            )}
                           </div>
-                          <DialogFooter>
-                            <Button
-                              variant="outline"
-                              onClick={() => resetField("config.early_stopper")}
-                            >
-                              {t("step3.clear")}
-                            </Button>
-                            <DialogClose asChild>
-                              <Button>{t("step3.done")}</Button>
-                            </DialogClose>
-                          </DialogFooter>
                         </div>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                />
+                        <div className="grid gap-3">
+                          <Label htmlFor="patience">
+                            {t("step4.early_stopper.patience.title")}
+                          </Label>
+                          <div className="space-y-1">
+                            <Input
+                              id="patience"
+                              defaultValue={watch(
+                                "config.early_stopper.patience",
+                              )}
+                              {...register("config.early_stopper.patience")}
+                            />
+                            {errors.config?.early_stopper?.patience && (
+                              <span className="px-1 text-destructive text-xs">
+                                {t(
+                                  // @ts-expect-error
+                                  `step4.early_stopper.patience.${errors.config.early_stopper.patience.message}`,
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => resetField("config.early_stopper")}
+                        >
+                          {t("step4.clear")}
+                        </Button>
+                        <DialogClose asChild>
+                          <Button>{t("step4.done")}</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               <hr />
             </div>
             <div className="flex items-center justify-between space-x-4 px-2">
               <div className="space-y-1">
                 <div className="font-medium text-base">
-                  {t("step3.runner.title")}
+                  {t("step4.runner.title")}
                 </div>
                 <div className="text-muted-foreground text-sm">
-                  {t("step3.runner.description")}
+                  {t("step4.runner.description")}
                 </div>
               </div>
-              <Controller
-                name="config.runner"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">
-                        <Icons.settings />
-                        {t("step3.configure")}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <div className="space-y-8">
-                        <DialogHeader>
-                          <DialogTitle>{t("step3.runner.title")}</DialogTitle>
-                          <DialogDescription>
-                            {t("step3.runner.description")}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4">
-                          <div className="grid gap-3">
-                            <Label htmlFor="num-iterations">
-                              {t("step3.runner.num_iterations.title")}
-                            </Label>
-                            <div className="space-y-1">
-                              <Input
-                                id="num-iterations"
-                                type="number"
-                                value={value.num_iterations}
-                                onChange={(event) =>
-                                  onChange({
-                                    ...value,
-                                    num_iterations: event.target.value,
-                                  })
-                                }
-                              />
-                              {errors.config?.runner?.num_iterations && (
-                                <span className="px-1 text-destructive text-xs">
-                                  {t(
-                                    // @ts-expect-error
-                                    `step3.runner.num_iterations.${errors.config.runner.num_iterations.message}`,
-                                  )}
-                                </span>
+              <Dialog>
+                <div className="flex flex-col items-end space-y-2">
+                  <DialogTrigger asChild>
+                    <Button variant="outline">
+                      <Icons.settings />
+                      {t("step4.configure")}
+                    </Button>
+                  </DialogTrigger>
+                  {errors.config?.runner && (
+                    <span className="text-destructive text-xs">
+                      {t("step4.error")}
+                    </span>
+                  )}
+                </div>
+                <DialogContent>
+                  <div className="space-y-8">
+                    <DialogHeader>
+                      <DialogTitle>{t("step4.runner.title")}</DialogTitle>
+                      <DialogDescription>
+                        {t("step4.runner.description")}
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                      <div className="grid gap-3">
+                        <Label htmlFor="num-iterations">
+                          {t("step4.runner.num_iterations.title")}
+                        </Label>
+                        <div className="space-y-1">
+                          <Input
+                            id="num-iterations"
+                            type="number"
+                            defaultValue={watch("config.runner.num_iterations")}
+                            {...register("config.runner.num_iterations")}
+                          />
+                          {errors.config?.runner?.num_iterations && (
+                            <span className="px-1 text-destructive text-xs">
+                              {t(
+                                // @ts-expect-error
+                                `step4.runner.num_iterations.${errors.config.runner.num_iterations.message}`,
                               )}
-                            </div>
-                          </div>
-                          <div className="grid gap-3">
-                            <Label htmlFor="prompt">
-                              {t("step3.runner.num_sequences.title")}
-                            </Label>
-                            <div className="space-y-1">
-                              <Input
-                                id="num_sequences"
-                                value={value.num_sequences}
-                                onChange={(event) =>
-                                  onChange({
-                                    ...value,
-                                    num_sequences: event.target.value,
-                                  })
-                                }
-                              />
-                              {errors.config?.runner?.num_sequences && (
-                                <span className="px-1 text-destructive text-xs">
-                                  {t(
-                                    // @ts-expect-error
-                                    `step3.runner.num_sequences.${errors.config.runner.num_sequences.message}`,
-                                  )}
-                                </span>
-                              )}
-                            </div>
-                          </div>
+                            </span>
+                          )}
                         </div>
-                        <DialogFooter>
-                          <Button
-                            variant="outline"
-                            onClick={() => resetField("config.runner")}
-                          >
-                            {isSubmitting ? (
-                              t("step3.clear")
-                            ) : (
-                              <Icons.spinner />
-                            )}
-                          </Button>
-                          <DialogClose asChild>
-                            <Button>{t("step3.done")}</Button>
-                          </DialogClose>
-                        </DialogFooter>
                       </div>
-                    </DialogContent>
-                  </Dialog>
-                )}
-              />
+                      <div className="grid gap-3">
+                        <Label htmlFor="prompt">
+                          {t("step4.runner.num_sequences.title")}
+                        </Label>
+                        <div className="space-y-1">
+                          <Input
+                            id="num_sequences"
+                            defaultValue={watch("config.runner.num_sequences")}
+                            {...register("config.runner.num_sequences")}
+                          />
+                          {errors.config?.runner?.num_sequences && (
+                            <span className="px-1 text-destructive text-xs">
+                              {t(
+                                // @ts-expect-error
+                                `step4.runner.num_sequences.${errors.config.runner.num_sequences.message}`,
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => resetField("config.runner")}
+                      >
+                        {isSubmitting ? t("step4.clear") : <Icons.spinner />}
+                      </Button>
+                      <DialogClose asChild>
+                        <Button>{t("step4.done")}</Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </AccordionContent>
         </AccordionItem>

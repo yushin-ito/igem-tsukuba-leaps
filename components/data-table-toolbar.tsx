@@ -17,7 +17,7 @@ export interface DataTableToolbarProps<TData> {
 }
 
 const DataTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
-  const t = useTranslations("project.step1");
+  const t = useTranslations("project.step2");
 
   return (
     <div className="flex items-center space-x-8">

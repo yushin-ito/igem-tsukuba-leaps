@@ -26,7 +26,7 @@ const DataTableColumnHeader = <TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) => {
-  const t = useTranslations("project.step1");
+  const t = useTranslations("project.step2");
 
   if (!column.getCanSort()) {
     return <div className={cn("w-24 text-sm", className)}>{title}</div>;
