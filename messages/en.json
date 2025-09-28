@@ -11,7 +11,7 @@
       "title": "403 Forbidden",
       "description": "You are not authorized to access this page."
     },
-    "signout": "Sign Out"
+    "logout": "Log Out"
   },
   "unauthorized": {
     "metadata": {
@@ -40,6 +40,9 @@
     "invalid_email": "Invalid email address.",
     "or": "or",
     "back": "Back",
+    "notice": "By continue, you agree to our\n<link>terms</link> and <link>privacy</link>.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
     "login": {
       "metadata": {
         "title": "Log In",
@@ -294,7 +297,7 @@
     "settings": "Settings",
     "terms": "Terms",
     "faq": "FAQ",
-    "log_out": "Log Out",
+    "logout": "Log Out",
     "message": "Message",
     "welcome": "Welcome to {name}.",
     "start": "Start Project",

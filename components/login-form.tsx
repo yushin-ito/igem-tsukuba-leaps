@@ -105,9 +105,7 @@ const LoginForm = () => {
               height={16}
               className="mr-0.5"
             />
-            {t.rich("login.login_with_provider", {
-              provider: "Google",
-            })}
+            {t("login.login_with_provider", { provider: "Google" })}
           </>
         )}
       </Button>

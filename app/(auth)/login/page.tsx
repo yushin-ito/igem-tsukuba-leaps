@@ -38,6 +38,21 @@ const LoginPage = async () => {
               {t("signup.metadata.title")}
             </Link>
           </p>
+          <p className="whitespace-pre-line text-center text-muted-foreground text-sm">
+            {t.rich("notice", {
+              link: (children) => (
+                <Link
+                  href={`/${children?.toString()}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4"
+                >
+                  {/* @ts-expect-error */}
+                  {t(children?.toString())}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
       </Suspense>
     </div>

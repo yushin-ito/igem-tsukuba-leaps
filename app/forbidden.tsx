@@ -34,7 +34,7 @@ const ForbiddenPage = () => {
         }}
         disabled={isPending}
       >
-        {t("signout")}
+        {t("logout")}
       </Button>
     </div>
   );

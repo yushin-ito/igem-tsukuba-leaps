@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "@/actions/auth";
 import Icons from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -19,6 +20,8 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { User } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 interface UserNavProps {
   user: Pick<User, "name" | "email" | "image">;
@@ -26,7 +29,10 @@ interface UserNavProps {
 
 const NavUser = ({ user }: UserNavProps) => {
   const t = useTranslations("project");
+
+  const router = useRouter();
   const isMobile = useIsMobile();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <SidebarMenu>
@@ -90,9 +96,17 @@ const NavUser = ({ user }: UserNavProps) => {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                startTransition(async () => {
+                  await signOut();
+                  router.refresh();
+                });
+              }}
+              disabled={isPending}
+            >
               <Icons.logOut />
-              {t("log_out")}
+              {t("logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

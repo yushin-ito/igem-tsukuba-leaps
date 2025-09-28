@@ -20,7 +20,7 @@ const TopPage = async () => {
   const t = await getTranslations("top");
 
   return (
-    <section className="container max-w-7xl py-8 md:py-16">
+    <section className="container max-w-7xl py-12">
       <div className="grid w-full items-center gap-10 text-center md:grid-cols-[1fr_840px] md:text-left">
         <div className="space-y-10 md:min-w-[380px]">
           <div className="space-y-2 md:space-y-4">
