@@ -266,7 +266,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
   const onSubmit = useCallback(
     async (data: FormData) => {
       const config = {
-        project: project.name,
+        project: project.id,
 
         debug: true,
         device: "cuda",
