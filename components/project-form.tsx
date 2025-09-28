@@ -48,7 +48,6 @@ import {
   type ChangeEvent,
   Fragment,
   useCallback,
-  useEffect,
   useMemo,
   useRef,
 } from "react";
@@ -128,11 +127,30 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       },
     },
   });
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
 
   const text = watch("text");
+
+  const { trigger: insertTask } = useSWRMutation(
+    "/api/tasks",
+    async (url: string, { arg }: { arg: { projectId: string } }) => {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({ projectId: arg.projectId }),
+      });
+
+      return await response.json();
+    },
+    {
+      onSuccess: () =>
+        toast.success(t("success.run.title"), {
+          description: t("success.run.description"),
+        }),
+      onError: () =>
+        toast.error(t("error.run.title"), {
+          description: t("error.run.description"),
+        }),
+    },
+  );
 
   const { trigger: uploadFiles } = useSWRMutation(
     "/api/upload",
@@ -351,8 +369,10 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
           new File([text], `${project.id}/input.csv`, { type: "text/csv" }),
         ],
       });
+
+      await insertTask({ projectId: project.id });
     },
-    [project, text, uploadFiles],
+    [insertTask, project, text, uploadFiles],
   );
 
   return (

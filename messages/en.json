@@ -348,6 +348,10 @@
       "delete": {
         "title": "Project Deleted",
         "description": "The project has been successfully deleted."
+      },
+      "run": {
+        "title": "Project Started",
+        "description": "The project has been successfully started."
       }
     },
     "error": {
@@ -370,6 +374,10 @@
       "delete": {
         "title": "Something went wrong.",
         "description": "Your project delete failed. Please try again."
+      },
+      "run": {
+        "title": "Something went wrong.",
+        "description": "Your project run failed. Please try again."
       }
     }
   },
