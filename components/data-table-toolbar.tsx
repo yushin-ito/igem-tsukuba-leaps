@@ -47,7 +47,8 @@ const DataTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {/* @ts-expect-error */}
+                {column.columnDef.meta?.label ?? column.id}
               </DropdownMenuCheckboxItem>
             ))}
         </DropdownMenuContent>

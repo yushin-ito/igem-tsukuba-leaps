@@ -223,6 +223,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       headers.map((header, index) => ({
         id: index.toString(),
         accessorKey: header,
+        meta: { label: header },
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title={header} />
         ),
