@@ -6,11 +6,8 @@ export const useDifference = (next: string[]) => {
   const diff = useMemo(() => {
     const prev = ref.current ?? [];
 
-    const before = new Set(prev);
-    const after = new Set(next);
-
-    const added = next.filter((value) => !before.has(value));
-    const removed = prev.filter((value) => !after.has(value));
+    const added = next.filter((value) => !new Set(prev).has(value));
+    const removed = prev.filter((value) => !new Set(next).has(value));
 
     return { added, removed };
   }, [next]);
