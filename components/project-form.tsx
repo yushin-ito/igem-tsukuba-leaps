@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useDifference } from "@/hooks/use-difference";
 import { parseDSV } from "@/lib/utils";
 import { confirmSchema, projectSchema, tableSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
@@ -48,6 +49,7 @@ import {
   type ChangeEvent,
   Fragment,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
 } from "react";
@@ -72,6 +74,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     setValue,
     reset,
     resetField,
+    unregister,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
@@ -178,6 +181,30 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
   const { headers, rows, delimiter } = useMemo(() => {
     return parseDSV(text);
   }, [text]);
+
+  const { added, removed } = useDifference(headers.slice(2));
+
+  useEffect(() => {
+    for (const header of removed) {
+      unregister(`config.predictor.${header}`);
+      unregister(`config.evaluator.${header}`);
+    }
+
+    for (const header of added) {
+      setValue(`config.predictor.${header}`, {
+        destruct_per_samples: "0",
+        num_destructions: "2",
+        mutate_per_samples: "150",
+        num_mutations: "2",
+      });
+
+      setValue(`config.evaluator.${header}`, {
+        mode: "max",
+        series: { top_p: "0.9" },
+        parallel: { top_k: "20" },
+      });
+    }
+  }, [added, removed, setValue, unregister]);
 
   const dataset = useMemo(
     () =>
@@ -413,7 +440,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           link: (chunks) => <Link href="">{chunks}</Link>,
                         })}
                       </div>
-                      {/* RadioGroup は Controller 維持 */}
                       <Controller
                         name={`confirm.question.${item}`}
                         control={control}
@@ -424,14 +450,23 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           <div className="space-y-2">
                             <RadioGroup value={value} onValueChange={onChange}>
                               <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="yes" id="yes" />
-                                <Label htmlFor="yes" className="font-normal">
+                                <RadioGroupItem
+                                  value="yes"
+                                  id={`${item}-yes`}
+                                />
+                                <Label
+                                  htmlFor={`${item}-yes`}
+                                  className="font-normal"
+                                >
                                   {t("step1.question.yes")}
                                 </Label>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="no" id="no" />
-                                <Label htmlFor="no" className="font-normal">
+                                <RadioGroupItem value="no" id={`${item}-no`} />
+                                <Label
+                                  htmlFor={`${item}-no`}
+                                  className="font-normal"
+                                >
                                   {t("step1.question.no")}
                                 </Label>
                               </div>
@@ -785,9 +820,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                             <Input
                               id="num-shuffles"
                               type="number"
-                              defaultValue={watch(
-                                "config.sampler.num_shuffles",
-                              )}
                               {...register("config.sampler.num_shuffles")}
                             />
                             {errors.config?.sampler?.num_shuffles && (
@@ -809,9 +841,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                               id="shuffle-rate"
                               type="number"
                               step="0.01"
-                              defaultValue={watch(
-                                "config.sampler.shuffle_rate",
-                              )}
                               {...register("config.sampler.shuffle_rate")}
                             />
                             {errors.config?.sampler?.shuffle_rate && (
@@ -832,9 +861,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                             <Input
                               id="window-sizes"
                               placeholder="1, 3, 5"
-                              defaultValue={watch(
-                                "config.sampler.window_sizes",
-                              )}
                               {...register("config.sampler.window_sizes")}
                             />
                             {errors.config?.sampler?.window_sizes && (
@@ -910,12 +936,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                             <Controller
                               name={`config.predictor.${header}`}
                               control={control}
-                              defaultValue={{
-                                destruct_per_samples: "0",
-                                num_destructions: "2",
-                                mutate_per_samples: "150",
-                                num_mutations: "2",
-                              }}
                               render={({ field: { value, onChange } }) => (
                                 <div className="grid gap-4">
                                   <div className="grid gap-3">
@@ -1106,11 +1126,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                                   key={strategy}
                                   name={`config.evaluator.${header}.${strategy}`}
                                   control={control}
-                                  defaultValue={
-                                    strategy === "series"
-                                      ? { top_p: "0.9" }
-                                      : { top_k: "20" }
-                                  }
                                   render={({ field: { value, onChange } }) => (
                                     <div className="grid gap-4">
                                       <div className="grid gap-3">
@@ -1284,9 +1299,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                             <Input
                               id="max-new-token"
                               type="number"
-                              defaultValue={watch(
-                                "config.generator.max_new_token",
-                              )}
                               {...register("config.generator.max_new_token")}
                             />
                             {errors.config?.generator?.max_new_token && (
@@ -1306,7 +1318,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           <div className="space-y-1">
                             <Input
                               id="prompt"
-                              defaultValue={watch("config.generator.prompt")}
                               {...register("config.generator.prompt")}
                             />
                             {errors.config?.generator?.prompt && (
@@ -1380,9 +1391,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                             <Input
                               id="num-samples"
                               type="number"
-                              defaultValue={watch(
-                                "config.early_stopper.num_samples",
-                              )}
                               {...register("config.early_stopper.num_samples")}
                             />
                             {errors.config?.early_stopper?.num_samples && (
@@ -1402,9 +1410,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           <div className="space-y-1">
                             <Input
                               id="patience"
-                              defaultValue={watch(
-                                "config.early_stopper.patience",
-                              )}
                               {...register("config.early_stopper.patience")}
                             />
                             {errors.config?.early_stopper?.patience && (
@@ -1475,7 +1480,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                           <Input
                             id="num-iterations"
                             type="number"
-                            defaultValue={watch("config.runner.num_iterations")}
                             {...register("config.runner.num_iterations")}
                           />
                           {errors.config?.runner?.num_iterations && (
@@ -1495,7 +1499,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                         <div className="space-y-1">
                           <Input
                             id="num_sequences"
-                            defaultValue={watch("config.runner.num_sequences")}
                             {...register("config.runner.num_sequences")}
                           />
                           {errors.config?.runner?.num_sequences && (

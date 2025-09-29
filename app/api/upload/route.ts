@@ -23,6 +23,7 @@ export const POST = async (req: NextRequest) => {
       files.map((file) =>
         put(file.name, file, {
           access: "public",
+          allowOverwrite: true,
         }),
       ),
     );
