@@ -121,6 +121,22 @@
     "step2": {
       "title": "step2. Upload Dataset",
       "description": "Upload a CSV file containing proteins and experimental values for each protein.",
+      "header": {
+        "too_few": "Must be at least 1 column.",
+        "too_many": "Must be at most 5 columns."
+      },
+      "row": {
+        "too_few": "Must be at least 40 rows.",
+        "too_many": "Must be at most 10000 rows."
+      },
+      "id": {
+        "required": "The header of the first column must be 'id'.",
+        "duplicate": "The 'id' must be unique."
+      },
+      "sequence": {
+        "required": "The header of the second column must be 'sequence'.",
+        "invalid_format": "The 'sequence' must be a standard amino acid sequence."
+      },
       "too_few_rows": "Rows must be at least 40.",
       "required_id": "The header of the first column must be 'id'.",
       "required_sequence": "The header of the second column must be 'sequence'.",

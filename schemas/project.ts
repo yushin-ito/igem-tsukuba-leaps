@@ -36,35 +36,57 @@ export const datasetSchema = z
       const { rows } = parseDSV(value);
       return rows.length >= 40;
     },
-    { message: "too_few_rows" },
+    { message: "row.too_few" },
+  )
+  .refine(
+    (value) => {
+      const { rows } = parseDSV(value);
+      return rows.length <= 10000;
+    },
+    { message: "row.too_many" },
   )
   .refine(
     (value) => {
       const { headers } = parseDSV(value);
       return headers[0] === "id";
     },
-    { message: "required_id" },
+    { message: "id.required" },
+  )
+  .refine(
+    (value) => {
+      const { rows } = parseDSV(value);
+      const ids = rows.map((row) => row[0]);
+      return new Set(ids).size === ids.length;
+    },
+    { message: "id.duplicate" },
   )
   .refine(
     (value) => {
       const { headers } = parseDSV(value);
       return headers[1] === "sequence";
     },
-    { message: "required_sequence" },
+    { message: "sequence.required" },
+  )
+  .refine(
+    (value) => {
+      const { rows } = parseDSV(value);
+      return rows.every((row) => /^[ACDEFGHIKLMNPQRSTVWY]+$/.test(row[1]));
+    },
+    { message: "sequence.invalid_format" },
   )
   .refine(
     (value) => {
       const { headers } = parseDSV(value);
       return headers.length - 2 >= 1;
     },
-    { message: "too_few_headers" },
+    { message: "header.too_few" },
   )
   .refine(
     (value) => {
       const { headers } = parseDSV(value);
       return headers.length - 2 <= 5;
     },
-    { message: "too_many_headers" },
+    { message: "header.too_many" },
   );
 
 export const projectSchema = z.object({

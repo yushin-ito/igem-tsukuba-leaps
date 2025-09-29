@@ -120,12 +120,23 @@
     },
     "step2": {
       "title": "Step2. データのアップロード",
-      "description": "タンパク質と各タンパク質に対する実験値を含むCSVファイルをアップロードしてください。",
-      "too_few_rows": "データは40行以上にしてください。",
-      "required_id": "1列目のヘッダーはidにしてください。",
-      "required_sequence": "2列目のヘッダーはsequenceにしてください。",
-      "too_few_headers": "実験値は1列以上にしてください。",
-      "too_many_headers": "実験値は5列以下にしてください。",
+      "description": "タンパク質と各タンパク質に対するラベルを含むCSVファイルをアップロードしてください。",
+      "header": {
+        "too_few": "1列以上で入力してください。",
+        "too_many": "5列以下で入力してください。"
+      },
+      "row": {
+        "too_few": "40行以上で入力してください。",
+        "too_many": "10000行以下で入力してください。"
+      },
+      "id": {
+        "required": "1列目はidにしてください。",
+        "duplicate": "idは重複しないように入力してください。"
+      },
+      "sequence": {
+        "required": "2列目はsequenceにしてください。",
+        "invalid_format": "sequenceは標準アミノ酸で入力してください。"
+      },
       "upload": "アップロード",
       "clear": "クリア",
       "delimiter": "区切り文字",
@@ -146,7 +157,7 @@
     },
     "step3": {
       "title": "Step3. 目標の設定",
-      "description": "各実験値に対して、目標を設定してください。",
+      "description": "各ラベルに対して、目標を設定してください。",
       "direction": "方向",
       "max": "最大値: {value}",
       "min": "最小値: {value}",
