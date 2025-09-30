@@ -72,7 +72,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     watch,
     control,
     setValue,
-    reset,
     resetField,
     unregister,
     handleSubmit,
@@ -594,7 +593,7 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
                 )}
               </div>
               <div className="flex items-center justify-end space-x-2">
-                <Button variant="outline" onClick={() => reset()}>
+                <Button variant="outline" onClick={() => resetField("text")}>
                   {t("step2.clear")}
                 </Button>
                 <div className={buttonVariants()}>

@@ -44,7 +44,7 @@ const DataTable = <TData, TValue>({
     (row, _columnId, filterValue: string) => {
       const cells = row.getVisibleCells();
       const value = cells[1]?.getValue?.();
-      return String(value ?? "")
+      return String(value)
         .toLowerCase()
         .includes(String(filterValue).toLowerCase());
     },
@@ -74,7 +74,6 @@ const DataTable = <TData, TValue>({
   return (
     <div className="space-y-6">
       <DataTableToolbar table={table} />
-
       <div className="rounded-md border shadow">
         <Table>
           <TableHeader>
@@ -120,7 +119,6 @@ const DataTable = <TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
       <DataTablePagination table={table} />
     </div>
   );
