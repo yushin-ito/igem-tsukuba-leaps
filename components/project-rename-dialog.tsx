@@ -25,12 +25,16 @@ import type { z } from "zod/v4";
 
 type FormData = z.infer<typeof renameSchema>;
 
-interface RenameDialogProps extends DialogProps {
+interface ProjectRenameDialogProps extends DialogProps {
   name: string;
   projectId: string;
 }
 
-const RenameDialog = ({ name, projectId, ...props }: RenameDialogProps) => {
+const ProjectRenameDialog = ({
+  name,
+  projectId,
+  ...props
+}: ProjectRenameDialogProps) => {
   const t = useTranslations("project");
   const { mutate } = useSWRConfig();
   const {
@@ -113,4 +117,4 @@ const RenameDialog = ({ name, projectId, ...props }: RenameDialogProps) => {
   );
 };
 
-export default RenameDialog;
+export default ProjectRenameDialog;

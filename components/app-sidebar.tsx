@@ -3,9 +3,9 @@
 import DeleteDialog from "@/components/delete-dialog";
 import Icons from "@/components/icons";
 import NavUser from "@/components/nav-user";
-import RenameDialog from "@/components/rename-dialog";
-import SearchDialog from "@/components/search-dialog";
-import ShareDialog from "@/components/share-dialog";
+import ProjectRenameDialog from "@/components/project-rename-dialog";
+import ProjectSearchDialog from "@/components/project-search-dialog";
+import ProjectShareDialog from "@/components/project-share-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -223,13 +223,13 @@ const AppSidebar = ({ user, projects }: AppSidebarProps) => {
           <NavUser user={user} />
         </SidebarFooter>
       </Sidebar>
-      <SearchDialog {...getDialogProps("search")} />
-      <RenameDialog
+      <ProjectSearchDialog {...getDialogProps("search")} />
+      <ProjectRenameDialog
         {...getDialogProps("rename")}
         projectId={state.type === "rename" ? state.data.projectId : ""}
         name={state.type === "rename" ? state.data.name : ""}
       />
-      <ShareDialog
+      <ProjectShareDialog
         {...getDialogProps("share")}
         projectId={state.type === "share" ? state.data.projectId : ""}
       />
