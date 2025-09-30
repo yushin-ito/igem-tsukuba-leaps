@@ -3,6 +3,7 @@
 import DataTable from "@/components/data-table";
 import DataTableColumnHeader from "@/components/data-table-column-header";
 import Icons from "@/components/icons";
+import SearchPathogenDialog from "@/components/search-pathogen-dialog";
 import {
   Accordion,
   AccordionContent,
@@ -62,7 +63,6 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import type { z } from "zod/v4";
-import SearchPathogenDialog from "./search-pathogen-dialog";
 
 interface DialogPayload {
   search: undefined;
