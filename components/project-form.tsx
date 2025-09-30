@@ -37,8 +37,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import env from "@/env";
 import { useDifference } from "@/hooks/use-difference";
 import { fetcher, parseDSV } from "@/lib/utils";
+import { configSchema } from "@/schemas/config";
 import { confirmSchema, projectSchema, tableSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { Project, Status, Task } from "@prisma/client";
@@ -77,6 +79,8 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
     resetField,
     unregister,
     handleSubmit,
+    reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: standardSchemaResolver(projectSchema),
@@ -134,15 +138,19 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
 
   const text = watch("text");
 
-  const { data, isLoading } = useSWR<Task[]>("/api/tasks", fetcher, {
-    fallbackData: tasks,
-    refreshInterval: (tasks) => {
-      const status = tasks?.[0]?.status;
-      const isActive = status === "pending" || status === "running";
+  const { data, mutate } = useSWR<Task[]>(
+    `/api/tasks?projectId=${project.id}`,
+    fetcher,
+    {
+      fallbackData: tasks,
+      refreshInterval: (tasks) => {
+        const status = tasks?.[0]?.status;
+        const isActive = status === "pending" || status === "running";
 
-      return isActive ? 2000 : 0;
+        return isActive ? 2000 : 0;
+      },
     },
-  });
+  );
 
   const isActive = useMemo(() => {
     const status = data?.[0]?.status;
@@ -160,10 +168,13 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
       return await response.json();
     },
     {
-      onSuccess: () =>
+      onSuccess: () => {
+        mutate();
         toast.success(t("success.run.title"), {
           description: t("success.run.description"),
-        }),
+        });
+      },
+
       onError: () =>
         toast.error(t("error.run.title"), {
           description: t("error.run.description"),
@@ -171,8 +182,8 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
     },
   );
 
-  const { trigger: updateTask } = useSWRMutation(
-    `/api/tasks/${data?.[0]?.id}`,
+  const { trigger: updateTask, isMutating: isMutatingCancel } = useSWRMutation(
+    data?.[0] ? `/api/tasks/${data[0].id}` : null,
     async (url: string, { arg }: { arg: Partial<Task> }) => {
       const response = await fetch(url, {
         method: "PATCH",
@@ -182,6 +193,7 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
       return await response.json();
     },
     {
+      onSuccess: () => mutate(),
       onError: () =>
         toast.error(t("error.upload.title"), {
           description: t("error.upload.description"),
@@ -189,7 +201,7 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
     },
   );
 
-  const { trigger: uploadFiles } = useSWRMutation(
+  const { trigger: uploadFile } = useSWRMutation(
     "/api/upload",
     async (url: string, { arg }: { arg: { files: File[] } }) => {
       const formData = new FormData();
@@ -217,6 +229,55 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
   }, [text]);
 
   const { added, removed } = useDifference(headers.slice(2));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const url = `${env.NEXT_PUBLIC_BLOB_URL}/${project.id}/input.csv`;
+        const response = await fetch(url);
+
+        if (response.ok) {
+          const text = await response.text();
+          setValue("text", text);
+        }
+      } catch {
+        toast.error(t("error.download.title"), {
+          description: t("error.download.description"),
+        });
+      }
+
+      try {
+        const url = `${env.NEXT_PUBLIC_BLOB_URL}/${project.id}/config.json`;
+        const response = await fetch(url);
+
+        if (response.ok) {
+          const json = await response.json();
+
+          if (json?.evaluator) {
+            json.evaluator = R.omit(json.evaluator, [
+              "hamiltonian",
+              "likelihood",
+            ]);
+          }
+
+          if (Array.isArray(json?.sampler?.window_sizes)) {
+            json.sampler.window_sizes = json.sampler.window_sizes.join(", ");
+          }
+
+          const config = configSchema.safeParse(json);
+
+          if (config.success) {
+            const values = getValues();
+            reset({ ...values, config: config.data });
+          }
+        }
+      } catch {
+        toast.error(t("error.download.title"), {
+          description: t("error.download.description"),
+        });
+      }
+    })();
+  }, [project.id, setValue, t, getValues, reset]);
 
   useEffect(() => {
     for (const header of removed) {
@@ -419,7 +480,7 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
         },
       };
 
-      await uploadFiles({
+      await uploadFile({
         files: [
           new File(
             [JSON.stringify(config, null, 2)],
@@ -434,7 +495,7 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
 
       await insertTask({ projectId: project.id });
     },
-    [insertTask, project, text, uploadFiles],
+    [insertTask, project, text, uploadFile],
   );
 
   const onCancel = useCallback(async () => {
@@ -706,12 +767,13 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
                                 onValueChange={(mode) => {
                                   if (mode === "range") {
                                     onChange({
+                                      ...value,
                                       mode,
-                                      lower: stats.min ?? 0,
-                                      upper: stats.max ?? 100,
+                                      lower: (stats.min ?? 0).toString(),
+                                      upper: (stats.max ?? 100).toString(),
                                     });
                                   } else {
-                                    onChange({ mode });
+                                    onChange({ ...value, mode });
                                   }
                                 }}
                                 disabled={headers.slice(2).length < 1}
@@ -1578,19 +1640,26 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
           {t("save")}
         </Button>
         {isActive ? (
-          <Button
-            type="button"
-            variant="destructive"
-            size="lg"
-            onClick={onCancel}
-          >
-            <Icons.pause />
-            {t("pause")}
+          <Button type="button" size="lg" onClick={onCancel}>
+            {isMutatingCancel ? (
+              <Icons.spinner className="animate-spin" />
+            ) : (
+              <>
+                <Icons.pause />
+                {t("pause")}
+              </>
+            )}
           </Button>
         ) : (
           <Button type="submit" size="lg">
-            <Icons.play />
-            {t("run")}
+            {isSubmitting ? (
+              <Icons.spinner className="animate-spin" />
+            ) : (
+              <>
+                <Icons.play />
+                {t("run")}
+              </>
+            )}
           </Button>
         )}
       </div>

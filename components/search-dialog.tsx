@@ -37,7 +37,7 @@ const SearchDialog = (props: DialogProps) => {
   );
 
   const { data, isLoading } = useSWR<Project[]>(
-    `/api/projects?query=${query}`,
+    `/api/projects?name=${query}`,
     fetcher,
   );
 

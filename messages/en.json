@@ -379,6 +379,10 @@
         "title": "Something went wrong.",
         "description": "Your file upload failed. Please try again." 
       },
+      "download": {
+        "title": "Something went wrong.",
+        "description": "Your file download failed. Please try again." 
+      },
       "copy": {
         "title": "Something went wrong.",
         "description": "Your code copy failed. Please try again." 

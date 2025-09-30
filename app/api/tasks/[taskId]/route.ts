@@ -12,7 +12,7 @@ const bodySchema = z.object({
 
 export const PATCH = async (
   req: Request,
-  { params }: { params: Promise<{ projectId: string }> },
+  { params }: { params: Promise<{ taskId: string }> },
 ) => {
   try {
     const session = await auth();
@@ -21,14 +21,14 @@ export const PATCH = async (
       unauthorized();
     }
 
-    const { projectId } = await params;
+    const { taskId } = await params;
 
     const json = await req.json();
     const body = bodySchema.parse(json);
 
     const task = await db.task.update({
       where: {
-        id: projectId,
+        id: taskId
       },
       data: {
         status: body.status,
@@ -37,6 +37,7 @@ export const PATCH = async (
 
     return NextResponse.json(task, { status: 200 });
   } catch (error) {
+    console.log(error)
     if (error instanceof z.ZodError) {
       return NextResponse.json({ errors: error.issues }, { status: 422 });
     }

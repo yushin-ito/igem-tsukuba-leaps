@@ -1,10 +1,13 @@
 import { z } from "zod/v4";
 
 const stringToNumber = z.codec(
-  z.string().regex(z.regexes.number, { error: "invalid_type" }),
+  z.union([
+    z.string().regex(z.regexes.number, { error: "invalid_type" }),
+    z.number({ error: "invalid_type" }),
+  ]),
   z.number(),
   {
-    decode: (str) => Number.parseFloat(str),
+    decode: (str) => Number.parseFloat(str.toString()),
     encode: (num) => num.toString(),
   },
 );

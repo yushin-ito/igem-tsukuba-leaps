@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 
 const searchParamsSchema = z.object({
-  query: z.string().optional(),
+  name: z.string().optional(),
 });
 
 const bodySchema = z.object({
@@ -22,16 +22,14 @@ export const GET = async (req: NextRequest) => {
     }
 
     const { searchParams } = new URL(req.url);
-    const { query } = searchParamsSchema.parse(
-      Object.fromEntries(searchParams),
-    );
+    const { name } = searchParamsSchema.parse(Object.fromEntries(searchParams));
 
     const projects = await db.project.findMany({
       where: {
         userId: session.user.id,
-        name: query
+        name: name
           ? {
-              contains: query,
+              contains: name,
               mode: "insensitive",
             }
           : undefined,

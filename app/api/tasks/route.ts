@@ -5,6 +5,10 @@ import { z } from "zod/v4";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 
+const searchParamsSchema = z.object({
+  projectId: z.string().optional(),
+});
+
 const bodySchema = z.object({
   projectId: z.string(),
 });
@@ -17,12 +21,14 @@ export const GET = async (req: NextRequest) => {
       unauthorized();
     }
 
-    const json = await req.json();
-    const body = bodySchema.parse(json);
+    const { searchParams } = new URL(req.url);
+    const { projectId } = searchParamsSchema.parse(
+      Object.fromEntries(searchParams),
+    );
 
     const tasks = await db.task.findMany({
       where: {
-        projectId: body.projectId,
+        projectId,
       },
       orderBy: {
         updatedAt: "desc",
