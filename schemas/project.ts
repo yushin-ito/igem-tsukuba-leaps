@@ -16,6 +16,12 @@ export const tableSchema = z
   .refine(({ headers }) => headers[0] === "id")
   .refine(({ headers }) => headers[1] === "sequence");
 
+export const pathogenSchema = z.object({
+  id: z.number().int().positive(),
+  category: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
+  name: z.string().min(1),
+});
+
 export const confirmSchema = z.object({
   question: z.object({
     toxin: z.enum(["yes", "no"], { error: "required" }),

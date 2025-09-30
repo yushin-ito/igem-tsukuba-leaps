@@ -102,7 +102,7 @@ const StatusCard = ({ project, tasks }: StatusCardProps) => {
         <p>
           {t.rich(`alert.${task.status}.description`, {
             link: (children) => (
-              <Link href="" className="underline underline-offset-4">
+              <Link href="" className="underline underline-offset-2">
                 {children}
               </Link>
             ),

@@ -34,7 +34,7 @@ const LoginPage = async () => {
           <LoginForm />
           <p className="text-center text-muted-foreground text-sm">
             {t("login.do_not_have_an_account")}{" "}
-            <Link href="/signup" className="underline underline-offset-4">
+            <Link href="/signup" className="underline underline-offset-2">
               {t("signup.metadata.title")}
             </Link>
           </p>
@@ -45,7 +45,7 @@ const LoginPage = async () => {
                   href={`/${children?.toString()}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4"
+                  className="underline underline-offset-2"
                 >
                   {/* @ts-expect-error */}
                   {t(children?.toString())}

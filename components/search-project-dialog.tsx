@@ -95,12 +95,12 @@ const SearchProjectDialog = (props: DialogProps) => {
               href="/project"
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "!px-3 h-10 w-full justify-start gap-2",
+                "h-auto w-full justify-start gap-2 px-3",
               )}
               onClick={() => props.onOpenChange?.(false)}
             >
               <Icons.squarePen className="size-5 text-muted-foreground" />
-              <div className="truncate">{t("new_project")}</div>
+              <p className="truncate">{t("new_project")}</p>
             </Link>
           )}
         </div>

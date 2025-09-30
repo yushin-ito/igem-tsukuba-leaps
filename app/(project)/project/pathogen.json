@@ -1,0 +1,706 @@
+{
+    "ja": [
+        {
+            "id": 1,
+            "category": 1,
+            "name": "ガナリトウイルス"
+        },
+        {
+            "id": 2,
+            "category": 1,
+            "name": "サビアウイルス"
+        },
+        {
+            "id": 3,
+            "category": 1,
+            "name": "チャパレウイルス"
+        },
+        {
+            "id": 4,
+            "category": 1,
+            "name": "フニンウイルス"
+        },
+        {
+            "id": 5,
+            "category": 1,
+            "name": "マチュポウイルス"
+        },
+        {
+            "id": 6,
+            "category": 1,
+            "name": "ラッサウイルス"
+        },
+        {
+            "id": 7,
+            "category": 1,
+            "name": "アイボリーコーストエボラウイルス"
+        },
+        {
+            "id": 8,
+            "category": 1,
+            "name": "ザイールウイルス"
+        },
+        {
+            "id": 9,
+            "category": 1,
+            "name": "ブンディブギョエボラウイルス"
+        },
+        {
+            "id": 10,
+            "category": 1,
+            "name": "スーダンエボラウイルス"
+        },
+        {
+            "id": 11,
+            "category": 1,
+            "name": "レストンエボラウイルス"
+        },
+        {
+            "id": 12,
+            "category": 1,
+            "name": "バリオラウイルス（別名痘そうウイルス）"
+        },
+        {
+            "id": 13,
+            "category": 1,
+            "name": "クリミア・コンゴヘモラジックフィーバーウイルス（別名クリミア・コンゴ出血熱ウイルス）"
+        },
+        {
+            "id": 14,
+            "category": 1,
+            "name": "レイクビクトリアマールブルグウイルス"
+        },
+        {
+            "id": 15,
+            "category": 2,
+            "name": "ペスティス（別名ペスト菌）"
+        },
+        {
+            "id": 16,
+            "category": 2,
+            "name": "ボツリヌム（別名ボツリヌス菌）"
+        },
+        {
+            "id": 17,
+            "category": 2,
+            "name": "SARSコロナウイルス"
+        },
+        {
+            "id": 18,
+            "category": 2,
+            "name": "アントラシス(別名炭疽菌）"
+        },
+        {
+            "id": 19,
+            "category": 2,
+            "name": "ツラレンシス（別名野兎病菌）（亜種ツラレンシス及びホルアークティカ）"
+        },
+        {
+            "id": 20,
+            "category": 2,
+            "name": "ボツリヌス毒素"
+        },
+        {
+            "id": 21,
+            "category": 3,
+            "name": "イースタンエクインエンセファリティスウイルス（別名東部ウマ脳炎ウイルス）"
+        },
+        {
+            "id": 22,
+            "category": 3,
+            "name": "ウエスタンエクインエンセファリティスウイルス（別名西部ウマ脳炎ウイルス）"
+        },
+        {
+            "id": 23,
+            "category": 3,
+            "name": "ベネズエラエクインエンセファリティスウイルス（別名ベネズエラウマ脳炎ウイルス）"
+        },
+        {
+            "id": 24,
+            "category": 3,
+            "name": "バーネッティイ"
+        },
+        {
+            "id": 25,
+            "category": 3,
+            "name": "イミチス"
+        },
+        {
+            "id": 26,
+            "category": 3,
+            "name": "Bウイルス"
+        },
+        {
+            "id": 27,
+            "category": 3,
+            "name": "シュードマレイ（別名類鼻疽菌）"
+        },
+        {
+            "id": 28,
+            "category": 3,
+            "name": "マレイ（別名鼻疽菌）"
+        },
+        {
+            "id": 29,
+            "category": 3,
+            "name": "アンデスウイルス"
+        },
+        {
+            "id": 30,
+            "category": 3,
+            "name": "シンノンブレウイルス"
+        },
+        {
+            "id": 31,
+            "category": 3,
+            "name": "ニューヨークウイルス"
+        },
+        {
+            "id": 32,
+            "category": 3,
+            "name": "バヨウウイルス"
+        },
+        {
+            "id": 33,
+            "category": 3,
+            "name": "ブラッククリークカナルウイルス"
+        },
+        {
+            "id": 34,
+            "category": 3,
+            "name": "ラグナネグラウイルス"
+        },
+        {
+            "id": 35,
+            "category": 3,
+            "name": "ソウルウイルス"
+        },
+        {
+            "id": 36,
+            "category": 3,
+            "name": "ドブラバーベルグレドウイルス"
+        },
+        {
+            "id": 37,
+            "category": 3,
+            "name": "ハンタンウイルス"
+        },
+        {
+            "id": 38,
+            "category": 3,
+            "name": "プーマラウイルス"
+        },
+        {
+            "id": 39,
+            "category": 3,
+            "name": "SFTSウイルス"
+        },
+        {
+            "id": 40,
+            "category": 3,
+            "name": "リフトバレーフィーバーウイルス（別名リフトバレー熱ウイルス）"
+        },
+        {
+            "id": 41,
+            "category": 3,
+            "name": "オムスクヘモラジックフィーバーウイルス（別名オムスク出血熱ウイルス）"
+        },
+        {
+            "id": 42,
+            "category": 3,
+            "name": "キャサヌルフォレストディジーズウイルス（別名キャサヌル森林病ウイルス）"
+        },
+        {
+            "id": 43,
+            "category": 3,
+            "name": "ティックボーンエンセファリティスウイルス（別名ダニ媒介脳炎ウイルス）"
+        },
+        {
+            "id": 44,
+            "category": 3,
+            "name": "アボルタス（別名ウシ流産菌）"
+        },
+        {
+            "id": 45,
+            "category": 3,
+            "name": "カニス（別名イヌ流産菌）"
+        },
+        {
+            "id": 46,
+            "category": 3,
+            "name": "スイス（別名ブタ流産菌）"
+        },
+        {
+            "id": 47,
+            "category": 3,
+            "name": "メリテンシス（別名マルタ熱菌）"
+        },
+        {
+            "id": 48,
+            "category": 3,
+            "name": "ニパウイルス"
+        },
+        {
+            "id": 49,
+            "category": 3,
+            "name": "ヘンドラウイルス"
+        },
+        {
+            "id": 50,
+            "category": 3,
+            "name": "MERSコロナウイルス"
+        },
+        {
+            "id": 51,
+            "category": 3,
+            "name": "ツベルクローシス（別名結核菌）"
+        },
+        {
+            "id": 52,
+            "category": 3,
+            "name": "ジャポニカ（別名日本紅斑熱リケッチア）"
+        },
+        {
+            "id": 53,
+            "category": 3,
+            "name": "ロワゼキイ（別名発しんチフスリケッチア）"
+        },
+        {
+            "id": 54,
+            "category": 3,
+            "name": "リケッチイ（別名ロッキー山紅斑熱リケッチア）"
+        },
+        {
+            "id": 55,
+            "category": 3,
+            "name": "レイビーズウイルス（別名狂犬病ウイルス）"
+        },
+        {
+            "id": 56,
+            "category": 4,
+            "name": "インフルエンザAウイルス（血清亜型がH2N2のもので新型インフルエンザ等感染症の病原体を除く）"
+        },
+        {
+            "id": 57,
+            "category": 4,
+            "name": "インフルエンザAウイルス（血清亜型がH5N1又はH7N7のもので新型インフルエンザ等感染症の病原体を除く）"
+        },
+        {
+            "id": 58,
+            "category": 4,
+            "name": "インフルエンザAウイルス（血清亜型がH7N9のもので新型インフルエンザ等感染症の病原体を除く）"
+        },
+        {
+            "id": 59,
+            "category": 4,
+            "name": "インフルエンザＡウイルス（新型インフルエンザ等感染症の病原体）"
+        },
+        {
+            "id": 60,
+            "category": 4,
+            "name": "エンテリカ（血清亜型がタイフィのもの）"
+        },
+        {
+            "id": 61,
+            "category": 4,
+            "name": "エンテリカ（血清亜型がパラタイフィＡのもの）"
+        },
+        {
+            "id": 62,
+            "category": 4,
+            "name": "イエローフィーバーウイルス（別名黄熱ウイルス）"
+        },
+        {
+            "id": 63,
+            "category": 4,
+            "name": "ウエストナイルウイルス"
+        },
+        {
+            "id": 64,
+            "category": 4,
+            "name": "モンキーポックスウイルス（別名サル痘ウイルス）"
+        },
+        {
+            "id": 65,
+            "category": 4,
+            "name": "レイビーズウイルス（別名狂犬病ウイルス）"
+        },
+        {
+            "id": 66,
+            "category": 4,
+            "name": "コリー（別名大腸菌）（腸管出血性大腸菌に限る）"
+        },
+        {
+            "id": 67,
+            "category": 4,
+            "name": "ポリオウイルス"
+        },
+        {
+            "id": 68,
+            "category": 4,
+            "name": "シッタシ（別名オウム病クラミジア）"
+        },
+        {
+            "id": 69,
+            "category": 4,
+            "name": "パルバム（遺伝子型がⅠ型、Ⅱ型のもの）"
+        },
+        {
+            "id": 70,
+            "category": 4,
+            "name": "ソンネイ"
+        },
+        {
+            "id": 71,
+            "category": 4,
+            "name": "デイゼンテリエ"
+        },
+        {
+            "id": 72,
+            "category": 4,
+            "name": "フレキシネリー"
+        },
+        {
+            "id": 73,
+            "category": 4,
+            "name": "ボイデイ"
+        },
+        {
+            "id": 74,
+            "category": 4,
+            "name": "コレラ（別名コレラ菌）（血清型がO1、O139のもの）"
+        },
+        {
+            "id": 75,
+            "category": 4,
+            "name": "デングウイルス"
+        },
+        {
+            "id": 76,
+            "category": 4,
+            "name": "ジャパニーズエンセファリティスウイルス（別名日本脳炎ウイルス）"
+        },
+        {
+            "id": 77,
+            "category": 4,
+            "name": "志賀毒素"
+        }
+    ],
+    "en": [
+        {
+            "id": 1,
+            "category": 1,
+            "name": "Abrin"
+        },
+        {
+            "id": 2,
+            "category": 1,
+            "name": "*Bacillus cereus* Biovar anthracis*"
+        },
+        {
+            "id": 3,
+            "category": 1,
+            "name": "Botulinum neurotoxins"
+        },
+        {
+            "id": 4,
+            "category": 1,
+            "name": "Botulinum neurotoxin producing species of *Clostridium*"
+        },
+        {
+            "id": 5,
+            "category": 1,
+            "name": "Conotoxins (Short, paralytic alpha conotoxins containing the following amino acid sequence X1CCX2PACGX3X4X5X6CX7)"
+        },
+        {
+            "id": 6,
+            "category": 1,
+            "name": "*Coxiella burnetii*"
+        },
+        {
+            "id": 7,
+            "category": 1,
+            "name": "Crimean-Congo haemorrhagic fever virus"
+        },
+        {
+            "id": 8,
+            "category": 1,
+            "name": "Diacetoxyscirpenol"
+        },
+        {
+            "id": 9,
+            "category": 1,
+            "name": "Eastern equine encephalitis virus"
+        },
+        {
+            "id": 10,
+            "category": 1,
+            "name": "Ebolavirus"
+        },
+        {
+            "id": 11,
+            "category": 1,
+            "name": "*Francisella tularensis*"
+        },
+        {
+            "id": 12,
+            "category": 1,
+            "name": "Lassa fever virus"
+        },
+        {
+            "id": 13,
+            "category": 1,
+            "name": "Lujo virus"
+        },
+        {
+            "id": 14,
+            "category": 1,
+            "name": "Marburg virus"
+        },
+        {
+            "id": 15,
+            "category": 1,
+            "name": "Monkeypox virus"
+        },
+        {
+            "id": 16,
+            "category": 1,
+            "name": "Reconstructed replication competent forms of the 1918 pandemic influenza virus containing any portion of the coding regions of all eight gene segments (Reconstructed 1918 Influenza virus)"
+        },
+        {
+            "id": 17,
+            "category": 1,
+            "name": "Ricin"
+        },
+        {
+            "id": 18,
+            "category": 1,
+            "name": "*Rickettsia prowazekii*"
+        },
+        {
+            "id": 19,
+            "category": 1,
+            "name": "Severe acute respiratory syndrome coronavirus (SARS-CoV)"
+        },
+        {
+            "id": 20,
+            "category": 1,
+            "name": "SARS-CoV/SARS-CoV-2 chimeric viruses resulting from any deliberate manipulation of SARS-CoV-2 to incorporate nucleic acids coding for SARS-CoV virulence factors"
+        },
+        {
+            "id": 21,
+            "category": 1,
+            "name": "Saxitoxin"
+        },
+        {
+            "id": 22,
+            "category": 1,
+            "name": "Chapare"
+        },
+        {
+            "id": 23,
+            "category": 1,
+            "name": "Guanarito"
+        },
+        {
+            "id": 24,
+            "category": 1,
+            "name": "Junin"
+        },
+        {
+            "id": 25,
+            "category": 1,
+            "name": "Machupo"
+        },
+        {
+            "id": 26,
+            "category": 1,
+            "name": "Sabia"
+        },
+        {
+            "id": 27,
+            "category": 1,
+            "name": "Staphylococcal enterotoxins (subtypes A,B,C,D,E)"
+        },
+        {
+            "id": 28,
+            "category": 1,
+            "name": "T-2 toxin"
+        },
+        {
+            "id": 29,
+            "category": 1,
+            "name": "Tetrodotoxin"
+        },
+        {
+            "id": 30,
+            "category": 1,
+            "name": "Far Eastern subtype"
+        },
+        {
+            "id": 31,
+            "category": 1,
+            "name": "Siberian subtype"
+        },
+        {
+            "id": 32,
+            "category": 1,
+            "name": "Kyasanur Forest disease virus"
+        },
+        {
+            "id": 33,
+            "category": 1,
+            "name": "Omsk hemorrhagic fever virus"
+        },
+        {
+            "id": 34,
+            "category": 1,
+            "name": "Variola major virus (Smallpox virus)"
+        },
+        {
+            "id": 35,
+            "category": 1,
+            "name": "Variola minor virus (Alastrim)"
+        },
+        {
+            "id": 36,
+            "category": 1,
+            "name": "*Yersinia pestis*"
+        },
+        {
+            "id": 37,
+            "category": 2,
+            "name": "*Bacillus anthracis*"
+        },
+        {
+            "id": 38,
+            "category": 2,
+            "name": "*Bacillus anthracis* Pasteur strain"
+        },
+        {
+            "id": 39,
+            "category": 2,
+            "name": "*Burkholderia mallei*"
+        },
+        {
+            "id": 40,
+            "category": 2,
+            "name": "*Burkholderia pseudomallei*"
+        },
+        {
+            "id": 41,
+            "category": 2,
+            "name": "Hendra virus"
+        },
+        {
+            "id": 42,
+            "category": 2,
+            "name": "Nipah virus"
+        },
+        {
+            "id": 43,
+            "category": 2,
+            "name": "Rift Valley fever virus"
+        },
+        {
+            "id": 44,
+            "category": 2,
+            "name": "Venezuelan equine encephalitis virus"
+        },
+        {
+            "id": 45,
+            "category": 3,
+            "name": "African swine fever virus"
+        },
+        {
+            "id": 46,
+            "category": 3,
+            "name": "Avian influenza virus"
+        },
+        {
+            "id": 47,
+            "category": 3,
+            "name": "Classical swine fever virus"
+        },
+        {
+            "id": 48,
+            "category": 3,
+            "name": "Foot-and-mouth disease virus"
+        },
+        {
+            "id": 49,
+            "category": 3,
+            "name": "Goat pox virus"
+        },
+        {
+            "id": 50,
+            "category": 3,
+            "name": "Lumpy skin disease virus"
+        },
+        {
+            "id": 51,
+            "category": 3,
+            "name": "*Mycoplasma capricolum*"
+        },
+        {
+            "id": 52,
+            "category": 3,
+            "name": "*Mycoplasma mycoides*"
+        },
+        {
+            "id": 53,
+            "category": 3,
+            "name": "Newcastle disease virus"
+        },
+        {
+            "id": 54,
+            "category": 3,
+            "name": "Peste des petits ruminants virus"
+        },
+        {
+            "id": 55,
+            "category": 3,
+            "name": "Rinderpest virus"
+        },
+        {
+            "id": 56,
+            "category": 3,
+            "name": "Sheep pox virus"
+        },
+        {
+            "id": 57,
+            "category": 3,
+            "name": "Swine vesicular disease virus"
+        },
+        {
+            "id": 58,
+            "category": 4,
+            "name": "*Coniothyrium glycines* (formerly *Phoma glycinicola* and *Pyrenochaeta glycines*)"
+        },
+        {
+            "id": 59,
+            "category": 4,
+            "name": "*Ralstonia solanacearum*"
+        },
+        {
+            "id": 60,
+            "category": 4,
+            "name": "*Rathayibacter toxicus*"
+        },
+        {
+            "id": 61,
+            "category": 4,
+            "name": "*Sclerophthora rayssiae*"
+        },
+        {
+            "id": 62,
+            "category": 4,
+            "name": "*Synchytrium endobioticum*"
+        },
+        {
+            "id": 63,
+            "category": 4,
+            "name": "*Xanthomonas oryzae*"
+        }
+    ]
+}

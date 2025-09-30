@@ -83,6 +83,14 @@
       "title": "Project",
       "description": "Design your ideal protein."
     },
+    "pathogen": {
+      "category": {
+        "1": "HHS",
+        "2": "Overlap",
+        "3": "USDA",
+        "4": "USDA PPQ"
+      }
+    },
     "step1": {
       "title": "Step1. Disclose Infomation",
       "description": "To prevent unintended use of LEAPS, we ask for disclosure of information.",
@@ -306,6 +314,7 @@
     "run": "Run",
     "pause": "Pause",
     "search_project": "Search Project",
+    "search_pathogen": "Search Pathogen",
     "today": "Today",
     "yesterday": "Yesterday",
     "last_week": "Last Week",

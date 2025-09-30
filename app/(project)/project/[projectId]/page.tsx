@@ -1,15 +1,19 @@
+import { promises as fs } from "node:fs";
 import { auth } from "@/auth";
 import ProjectForm from "@/components/project-form";
 import StatusCard from "@/components/status-card";
 import { db } from "@/lib/db";
-import { getTranslations } from "next-intl/server";
+import { pathogenSchema } from "@/schemas/project";
+import { getLocale, getTranslations } from "next-intl/server";
 import { notFound, unauthorized } from "next/navigation";
+import z from "zod/v4";
 
 interface ProjectPageProps {
   params: Promise<{ projectId: string }>;
 }
 
 const ProjectPage = async ({ params }: ProjectPageProps) => {
+  const locale = await getLocale();
   const t = await getTranslations("project");
   const session = await auth();
   const { projectId } = await params;
@@ -42,6 +46,13 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
     },
   });
 
+  const file = await fs.readFile(
+    `${process.cwd()}/app/(project)/project/pathogen.json`,
+    "utf8",
+  );
+  const data = JSON.parse(file);
+  const pathogens = z.array(pathogenSchema).parse(data[locale]);
+
   return (
     <section className="container max-w-4xl space-y-4 py-16">
       <div className="space-y-4">
@@ -56,7 +67,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         <hr />
       </div>
       <div className="space-y-12">
-        <ProjectForm project={project} tasks={tasks} />
+        <ProjectForm project={project} tasks={tasks} pathogens={pathogens} />
         <StatusCard project={project} tasks={tasks} />
       </div>
     </section>
