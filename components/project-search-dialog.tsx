@@ -85,7 +85,7 @@ const ProjectSearchDialog = (props: DialogProps) => {
               ref={ref}
               placeholder={t("search_project")}
               onChange={debouncer.call}
-              className="border-none pl-8 shadow-none focus-visible:ring-0 md:text-base"
+              className="!bg-transparent border-none pl-8 shadow-none focus-visible:ring-0 md:text-base"
             />
             <Icons.search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-2 size-5 select-none opacity-50" />
           </div>
