@@ -38,10 +38,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useDifference } from "@/hooks/use-difference";
-import { parseDSV } from "@/lib/utils";
+import { fetcher, parseDSV } from "@/lib/utils";
 import { confirmSchema, projectSchema, tableSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import type { Project } from "@prisma/client";
+import type { Project, Status, Task } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -56,16 +56,18 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import * as R from "remeda";
 import { toast } from "sonner";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import type { z } from "zod/v4";
 
 interface ProjectFormProps {
   project: Pick<Project, "id" | "name">;
+  tasks: Task[];
 }
 
 type FormData = z.infer<typeof projectSchema>;
 
-const ProjectForm = ({ project }: ProjectFormProps) => {
+const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
   const t = useTranslations("project");
   const {
     register,
@@ -132,6 +134,21 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 
   const text = watch("text");
 
+  const { data, isLoading } = useSWR<Task[]>("/api/tasks", fetcher, {
+    fallbackData: tasks,
+    refreshInterval: (tasks) => {
+      const status = tasks?.[0]?.status;
+      const isActive = status === "pending" || status === "running";
+
+      return isActive ? 2000 : 0;
+    },
+  });
+
+  const isActive = useMemo(() => {
+    const status = data?.[0]?.status;
+    return status === "pending" || status === "running";
+  }, [data]);
+
   const { trigger: insertTask } = useSWRMutation(
     "/api/tasks",
     async (url: string, { arg }: { arg: { projectId: string } }) => {
@@ -150,6 +167,24 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       onError: () =>
         toast.error(t("error.run.title"), {
           description: t("error.run.description"),
+        }),
+    },
+  );
+
+  const { trigger: updateTask } = useSWRMutation(
+    `/api/tasks/${data?.[0]?.id}`,
+    async (url: string, { arg }: { arg: Partial<Task> }) => {
+      const response = await fetch(url, {
+        method: "PATCH",
+        body: JSON.stringify({ status: arg.status }),
+      });
+
+      return await response.json();
+    },
+    {
+      onError: () =>
+        toast.error(t("error.upload.title"), {
+          description: t("error.upload.description"),
         }),
     },
   );
@@ -272,6 +307,10 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     });
   }, [headers, rows, delimiter]);
 
+  const formatter = new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: 3,
+  });
+
   const onUpload = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -285,10 +324,6 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     },
     [setValue],
   );
-
-  const formatter = new Intl.NumberFormat(undefined, {
-    maximumFractionDigits: 3,
-  });
 
   const onSubmit = useCallback(
     async (data: FormData) => {
@@ -401,6 +436,14 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     },
     [insertTask, project, text, uploadFiles],
   );
+
+  const onCancel = useCallback(async () => {
+    if (!data?.[0]) {
+      return;
+    }
+
+    await updateTask({ status: "canceled" });
+  }, [data, updateTask]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
@@ -1534,10 +1577,22 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
         <Button type="button" variant="outline" size="lg">
           {t("save")}
         </Button>
-        <Button type="submit" size="lg">
-          <Icons.play />
-          {t("run")}
-        </Button>
+        {isActive ? (
+          <Button
+            type="button"
+            variant="destructive"
+            size="lg"
+            onClick={onCancel}
+          >
+            <Icons.pause />
+            {t("pause")}
+          </Button>
+        ) : (
+          <Button type="submit" size="lg">
+            <Icons.play />
+            {t("run")}
+          </Button>
+        )}
       </div>
     </form>
   );

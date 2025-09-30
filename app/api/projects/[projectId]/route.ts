@@ -63,7 +63,6 @@ export const PATCH = async (
       },
       data: {
         name: body.name,
-        updatedAt: new Date(),
       },
     });
 

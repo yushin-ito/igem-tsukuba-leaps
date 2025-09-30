@@ -37,7 +37,7 @@ export const GET = async (req: NextRequest) => {
           : undefined,
       },
       orderBy: {
-        updatedAt: "asc",
+        updatedAt: "desc",
       },
     });
 

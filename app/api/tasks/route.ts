@@ -9,6 +9,36 @@ const bodySchema = z.object({
   projectId: z.string(),
 });
 
+export const GET = async (req: NextRequest) => {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      unauthorized();
+    }
+
+    const json = await req.json();
+    const body = bodySchema.parse(json);
+
+    const tasks = await db.task.findMany({
+      where: {
+        projectId: body.projectId,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    return NextResponse.json(tasks, { status: 200 });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ errors: error.issues }, { status: 422 });
+    }
+
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+};
+
 export const POST = async (req: NextRequest) => {
   try {
     const session = await auth();

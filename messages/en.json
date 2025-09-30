@@ -304,7 +304,7 @@
       "clear": "Clear"
     },
     "run": "Run",
-    "stop": "Stop",
+    "pause": "Pause",
     "search_project": "Search Project",
     "today": "Today",
     "yesterday": "Yesterday",

@@ -32,6 +32,15 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
     notFound();
   }
 
+  const tasks = await db.task.findMany({
+    where: {
+      projectId: project.id,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
   return (
     <section className="container max-w-4xl space-y-4 py-16">
       <div className="space-y-4">
@@ -45,7 +54,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </div>
         <hr />
       </div>
-      <ProjectForm project={project} />
+      <ProjectForm project={project} tasks={tasks} />
     </section>
   );
 };
