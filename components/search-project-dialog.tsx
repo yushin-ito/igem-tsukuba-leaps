@@ -20,7 +20,7 @@ import { useMemo, useRef, useState } from "react";
 import * as R from "remeda";
 import useSWR from "swr";
 
-const ProjectSearchDialog = (props: DialogProps) => {
+const SearchProjectDialog = (props: DialogProps) => {
   const t = useTranslations("project");
   const [query, setQuery] = useState("");
   const ref = useRef<HTMLInputElement>(null);
@@ -162,4 +162,4 @@ const ProjectSearchDialog = (props: DialogProps) => {
   );
 };
 
-export default ProjectSearchDialog;
+export default SearchProjectDialog;

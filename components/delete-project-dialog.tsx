@@ -17,11 +17,14 @@ import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
-interface DeleteDialogProps extends AlertDialogProps {
+interface DeleteProjectDialogProps extends AlertDialogProps {
   projectId: string;
 }
 
-const DeleteDialog = ({ projectId, ...props }: DeleteDialogProps) => {
+const DeleteProjectDialog = ({
+  projectId,
+  ...props
+}: DeleteProjectDialogProps) => {
   const t = useTranslations("project");
   const router = useRouter();
   const segment = useSelectedLayoutSegment();
@@ -80,4 +83,4 @@ const DeleteDialog = ({ projectId, ...props }: DeleteDialogProps) => {
   );
 };
 
-export default DeleteDialog;
+export default DeleteProjectDialog;

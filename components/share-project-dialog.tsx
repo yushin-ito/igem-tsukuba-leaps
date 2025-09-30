@@ -17,14 +17,14 @@ import type { DialogProps } from "@radix-ui/react-dialog";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-interface ProjectShareDialogProps extends DialogProps {
+interface ShareProjectDialogProps extends DialogProps {
   projectId: string;
 }
 
-const ProjectShareDialog = ({
+const ShareProjectDialog = ({
   projectId,
   ...props
-}: ProjectShareDialogProps) => {
+}: ShareProjectDialogProps) => {
   const link = `${siteConfig.url}/${projectId}`;
 
   const t = useTranslations("project");
@@ -77,4 +77,4 @@ const ProjectShareDialog = ({
   );
 };
 
-export default ProjectShareDialog;
+export default ShareProjectDialog;
