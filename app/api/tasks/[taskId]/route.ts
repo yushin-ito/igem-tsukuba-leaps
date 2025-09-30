@@ -28,7 +28,7 @@ export const PATCH = async (
 
     const task = await db.task.update({
       where: {
-        id: taskId
+        id: taskId,
       },
       data: {
         status: body.status,
@@ -37,7 +37,7 @@ export const PATCH = async (
 
     return NextResponse.json(task, { status: 200 });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json({ errors: error.issues }, { status: 422 });
     }

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import ProjectForm from "@/components/project-form";
+import StatusCard from "@/components/status-card";
 import { db } from "@/lib/db";
 import { getTranslations } from "next-intl/server";
 import { notFound, unauthorized } from "next/navigation";
@@ -54,7 +55,10 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </div>
         <hr />
       </div>
-      <ProjectForm project={project} tasks={tasks} />
+      <div className="space-y-12">
+        <ProjectForm project={project} tasks={tasks} />
+        <StatusCard project={project} tasks={tasks} />
+      </div>
     </section>
   );
 };

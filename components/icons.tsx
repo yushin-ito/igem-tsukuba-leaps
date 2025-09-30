@@ -6,14 +6,18 @@ import {
   ArrowRight,
   ArrowUp,
   ArrowUpDown,
+  Ban,
   Check,
   CheckCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  CircleAlert,
+  CircleCheckBig,
   CircleHelp,
   CircleUserRound,
+  Clock,
   Copy,
   Ellipsis,
   EllipsisVertical,
@@ -35,6 +39,7 @@ import {
   SquarePen,
   Sun,
   Trash,
+  X,
 } from "lucide-react";
 
 const Icons = {
@@ -44,14 +49,18 @@ const Icons = {
   arrowRight: ArrowRight,
   arrowUp: ArrowUp,
   arrowUpDown: ArrowUpDown,
+  ban: Ban,
   check: Check,
   checkCircle: CheckCircle,
   chevronDown: ChevronDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   chevronsUpDown: ChevronsUpDown,
+  circleAlert: CircleAlert,
+  circleCheckBig: CircleCheckBig,
   circleHelp: CircleHelp,
   circleUserRound: CircleUserRound,
+  clock: Clock,
   copy: Copy,
   ellipsis: Ellipsis,
   ellipsisVertical: EllipsisVertical,
@@ -72,6 +81,7 @@ const Icons = {
   squarePen: SquarePen,
   sun: Sun,
   trash: Trash,
+  x: X,
   logo: (props: LucideProps) => (
     <svg
       width="24"

@@ -327,6 +327,28 @@
       "title": "No search results found",
       "description": "Please try searching with different keywords."
     },
+    "alert": {
+      "pending": {
+        "title": "The task is pending.",
+        "description": "Your task has been added to the queue. Processing will begin once computing resources are allocated. This may take a few minutes. Please wait."
+      },
+      "running": {
+        "title": "The task is running.",
+        "description": "Your task is being processed on the server. When it finishes, an email will be sent to your registered address. This may take up to several days. Please wait."
+      },
+      "succeeded": {
+        "title": "The task has completed.",
+        "description": "The task finished successfully. Please check the table below for the outputs. If you run into any issues, contact <link>Support</link>."
+      },
+      "failed": {
+        "title": "The task failed.",
+        "description": "The task has failed. Please review your dataset and parameters, then try again. If you continue to have problems, contact <link>Support</link>."
+      },
+      "canceled": {
+        "title": "The task was canceled.",
+        "description": "The task was canceled successfully. Any generated artifacts will be deleted automatically. If you have any questions, contact <link>Support</link>."
+      }
+    },
     "dialog": {
       "search": {
         "title": "Search Project",

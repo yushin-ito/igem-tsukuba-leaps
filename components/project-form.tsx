@@ -43,7 +43,7 @@ import { fetcher, parseDSV } from "@/lib/utils";
 import { configSchema } from "@/schemas/config";
 import { confirmSchema, projectSchema, tableSchema } from "@/schemas/project";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import type { Project, Status, Task } from "@prisma/client";
+import type { Project, Task } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -63,7 +63,7 @@ import useSWRMutation from "swr/mutation";
 import type { z } from "zod/v4";
 
 interface ProjectFormProps {
-  project: Pick<Project, "id" | "name">;
+  project: Pick<Project, "id">;
   tasks: Task[];
 }
 
@@ -143,8 +143,12 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
     fetcher,
     {
       fallbackData: tasks,
-      refreshInterval: (tasks) => {
-        const status = tasks?.[0]?.status;
+      refreshInterval: (data) => {
+        if (!data || data.length === 0) {
+          return 0;
+        }
+
+        const status = data[0].status;
         const isActive = status === "pending" || status === "running";
 
         return isActive ? 2000 : 0;
@@ -153,7 +157,11 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
   );
 
   const isActive = useMemo(() => {
-    const status = data?.[0]?.status;
+    if (!data || data.length === 0) {
+      return false;
+    }
+
+    const status = data[0].status;
     return status === "pending" || status === "running";
   }, [data]);
 
@@ -499,7 +507,7 @@ const ProjectForm = ({ project, tasks }: ProjectFormProps) => {
   );
 
   const onCancel = useCallback(async () => {
-    if (!data?.[0]) {
+    if (!data || data.length === 0) {
       return;
     }
 
