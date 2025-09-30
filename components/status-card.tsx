@@ -93,7 +93,9 @@ const StatusCard = ({ project, tasks }: StatusCardProps) => {
           suppressHydrationWarning
           className="font-normal text-muted-foreground text-sm"
         >
-          {formatDistance(task.createdAt, now)}
+          {isActive
+            ? formatDistance(task.createdAt, now)
+            : formatDistance(task.createdAt, task.updatedAt)}
         </span>
       </AlertTitle>
       <AlertDescription className="pr-8">
