@@ -47,7 +47,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
   });
 
   const file = await fs.readFile(
-    `${process.cwd()}/app/(project)/project/pathogen.json`,
+    `${process.cwd()}/public/data/pathogen.json`,
     "utf8",
   );
   const data = JSON.parse(file);
