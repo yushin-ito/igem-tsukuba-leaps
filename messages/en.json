@@ -223,7 +223,7 @@
           "too_small": "Must be at least 1."
         },
         "num_destructions": {
-          "title": "Number of Destructions",
+          "title": "Number of Amino Acid to Destruct",
           "description": "",
           "invalid_type": "Must be an integer.",
           "too_small": "Must be at least 1."
@@ -235,7 +235,7 @@
           "too_small": "Must be at least 1."
         },
         "num_mutations": {
-          "title": "Number of Mutations",
+          "title": "Number of Amino Acid to Mutate",
           "description": "",
           "invalid_type": "Must be an integer.",
           "too_small": "Must be at least 1."

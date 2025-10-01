@@ -217,7 +217,7 @@
           "too_small": "1以上で入力してください。"
         },
         "num_destructions": { 
-          "title": "破壊する回数",
+          "title": "破壊するアミノ酸の数",
           "description": "",
           "invalid_type": "整数で入力してください。",
           "too_small": "1以上で入力してください。"

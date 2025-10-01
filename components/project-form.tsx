@@ -1678,7 +1678,7 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
                           variant="outline"
                           onClick={() => resetField("config.runner")}
                         >
-                          {isSubmitting ? t("step4.clear") : <Icons.spinner />}
+                          {t("step4.clear")}
                         </Button>
                         <DialogClose asChild>
                           <Button>{t("step4.done")}</Button>
