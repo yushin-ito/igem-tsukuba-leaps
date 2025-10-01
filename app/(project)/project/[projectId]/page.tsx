@@ -5,7 +5,6 @@ import ProjectForm from "@/components/project-form";
 import StatusCard from "@/components/status-card";
 import { db } from "@/lib/db";
 import { pathogenSchema } from "@/schemas/project";
-import type { Pathogen } from "@/types";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound, unauthorized } from "next/navigation";
 import z from "zod/v4";
@@ -48,18 +47,12 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
     },
   });
 
-  let pathogens: Pathogen[] = [];
-
-  try {
-    const file = await fs.readFile(
-      path.join(process.cwd(), "public", "data", "pathogen.json"),
-      "utf8",
-    );
-    const data = JSON.parse(file);
-    pathogens = z.array(pathogenSchema).parse(data[locale]);
-  } catch (error) {
-    console.error("Error loading pathogen data:", error);
-  }
+  const file = await fs.readFile(
+    path.join(process.cwd(), "public", "data", "pathogen.json"),
+    "utf8",
+  );
+  const data = JSON.parse(file);
+  const pathogens = z.array(pathogenSchema).parse(data[locale]);
 
   return (
     <section className="container max-w-4xl space-y-4 py-16">
