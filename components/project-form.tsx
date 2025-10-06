@@ -203,12 +203,8 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
 
         if (response.ok) {
           const json = await response.json();
-          const config = configSchema.safeParse(json);
-
-          if (config.success) {
-            const values = getValues();
-            reset({ ...values, config: config.data });
-          }
+          const config = configSchema.parse(json);
+          setValue("config", config);
         }
       } catch {
         toast.error(t("error.download.title"), {
@@ -216,7 +212,7 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
         });
       }
     })();
-  }, [project.id, setValue, t, getValues, reset]);
+  }, [project.id, setValue, t]);
 
   useEffect(() => {
     const predictor = R.mapToObj(headers.slice(2), (key) => [
@@ -273,12 +269,8 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
   );
 
   const onCancel = useCallback(async () => {
-    if (!data || data.length === 0) {
-      return;
-    }
-
     await updateTask({ status: "canceled" });
-  }, [data, updateTask]);
+  }, [updateTask]);
 
   return (
     <FormProvider {...methods}>
