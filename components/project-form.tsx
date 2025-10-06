@@ -76,8 +76,6 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
     setValue,
     resetField,
     handleSubmit,
-    reset,
-    getValues,
     formState: { errors, isSubmitting },
   } = methods;
 
