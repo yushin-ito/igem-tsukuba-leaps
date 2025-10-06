@@ -47,8 +47,10 @@ const LoginPage = async () => {
                   rel="noopener noreferrer"
                   className="underline underline-offset-2"
                 >
-                  {/* @ts-expect-error */}
-                  {t(children?.toString())}
+                  {
+                    // @ts-expect-error
+                    t(children?.toString())
+                  }
                 </Link>
               ),
             })}

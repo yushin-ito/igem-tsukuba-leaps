@@ -25,16 +25,16 @@ import type { z } from "zod/v4";
 
 type FormData = z.infer<typeof renameSchema>;
 
-interface RenameProjectDialogProps extends DialogProps {
+interface UpdateProjectDialogProps extends DialogProps {
   name: string;
   projectId: string;
 }
 
-const RenameProjectDialog = ({
+const UpdateProjectDialog = ({
   name,
   projectId,
   ...props
-}: RenameProjectDialogProps) => {
+}: UpdateProjectDialogProps) => {
   const t = useTranslations("project");
   const { mutate } = useSWRConfig();
   const {
@@ -94,8 +94,10 @@ const RenameProjectDialog = ({
             <Input {...register("name")} disabled={isSubmitting} />
             {errors.name && (
               <span className="px-1 text-destructive text-xs">
-                {/* @ts-expect-error */}
-                {t(`name.${errors.name.message}`)}
+                {
+                  //@ts-expect-error
+                  t(`name.${errors.name.message}`)
+                }
               </span>
             )}
           </div>
@@ -117,4 +119,4 @@ const RenameProjectDialog = ({
   );
 };
 
-export default RenameProjectDialog;
+export default UpdateProjectDialog;

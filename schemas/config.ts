@@ -1,34 +1,13 @@
 import { z } from "zod/v4";
 
-const stringToNumber = z.codec(
-  z.union([
-    z.string().regex(z.regexes.number, { error: "invalid_type" }),
-    z.number({ error: "invalid_type" }),
-  ]),
-  z.number(),
-  {
-    decode: (str) => Number.parseFloat(str.toString()),
-    encode: (num) => num.toString(),
-  },
-);
-
-const numberToString = z.codec(z.number(), z.string(), {
-  decode: (num) => num.toString(),
-  encode: (str) => Number(str),
-});
-
 export const samplerSchema = z.object({
-  num_shuffles: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-    .pipe(numberToString),
-  shuffle_rate: stringToNumber
-    .pipe(
-      z
-        .number({ error: "invalid_type" })
-        .min(0, { error: "too_small" })
-        .max(1, { error: "too_big" }),
-    )
-    .pipe(numberToString),
+  num_sequences: z
+    .int({ error: "invalid_type" })
+    .min(0, { error: "too_small" }),
+  shuffle_rate: z
+    .number({ error: "invalid_type" })
+    .min(0, { error: "too_small" })
+    .max(1, { error: "too_big" }),
   window_sizes: z
     .string()
     .regex(/^\d+(?:\s*,\s*\d+)*$/, { message: "invalid_format" })
@@ -53,18 +32,12 @@ export const samplerSchema = z.object({
 export const predictorSchema = z.record(
   z.string(),
   z.object({
-    destruct_per_samples: stringToNumber
-      .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-      .pipe(numberToString),
-    num_destructions: stringToNumber
-      .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-      .pipe(numberToString),
-    mutate_per_samples: stringToNumber
-      .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-      .pipe(numberToString),
-    num_mutations: stringToNumber
-      .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-      .pipe(numberToString),
+    num_destructions: z
+      .int({ error: "invalid_type" })
+      .min(0, { error: "too_small" }),
+    num_mutations: z
+      .int({ error: "invalid_type" })
+      .min(0, { error: "too_small" }),
   }),
 );
 
@@ -77,56 +50,44 @@ export const evaluatorSchema = z.record(
       z
         .object({
           mode: z.literal("range"),
-          lower: stringToNumber
-            .pipe(z.number({ error: "invalid_type" }))
-            .pipe(numberToString),
-          upper: stringToNumber
-            .pipe(z.number({ error: "invalid_type" }))
-            .pipe(numberToString),
+          lower: z.number({ error: "invalid_type" }),
+          upper: z.number({ error: "invalid_type" }),
         })
-        .refine((v) => Number(v.lower) < Number(v.upper), {
-          path: ["upper"],
+        .refine((value) => value.lower < value.upper, {
           message: "invalid_range",
+          path: ["upper", "lower"],
         }),
     ])
     .and(
       z.object({
         series: z.union([
           z.object({
-            top_p: stringToNumber
-              .pipe(
-                z
-                  .number({ error: "invalid_type" })
-                  .gt(0, { error: "too_small" })
-                  .lte(1, { error: "too_big" }),
-              )
-              .pipe(numberToString),
+            mode: z.literal("top_p"),
+            value: z
+              .number({ error: "invalid_type" })
+              .gt(0, { error: "too_small" })
+              .lte(1, { error: "too_big" }),
           }),
           z.object({
-            top_k: stringToNumber
-              .pipe(
-                z.int({ error: "invalid_type" }).gte(1, { error: "too_small" }),
-              )
-              .pipe(numberToString),
+            mode: z.literal("top_k"),
+            value: z
+              .int({ error: "invalid_type" })
+              .gte(1, { error: "too_small" }),
           }),
         ]),
         parallel: z.union([
           z.object({
-            top_p: stringToNumber
-              .pipe(
-                z
-                  .number({ error: "invalid_type" })
-                  .gt(0, { error: "too_small" })
-                  .lte(1, { error: "too_big" }),
-              )
-              .pipe(numberToString),
+            mode: z.literal("top_p"),
+            value: z
+              .number({ error: "invalid_type" })
+              .gt(0, { error: "too_small" })
+              .lte(1, { error: "too_big" }),
           }),
           z.object({
-            top_k: stringToNumber
-              .pipe(
-                z.int({ error: "invalid_type" }).gte(1, { error: "too_small" }),
-              )
-              .pipe(numberToString),
+            mode: z.literal("top_k"),
+            value: z
+              .int({ error: "invalid_type" })
+              .gte(1, { error: "too_small" }),
           }),
         ]),
       }),
@@ -134,9 +95,9 @@ export const evaluatorSchema = z.record(
 );
 
 export const generatorSchema = z.object({
-  max_new_token: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(0, { error: "too_small" }))
-    .pipe(numberToString),
+  max_new_token: z
+    .int({ error: "invalid_type" })
+    .min(0, { error: "too_small" }),
   prompt: z
     .string()
     .regex(/^[ACDEFGHIKLMNPQRSTVWY]+$/i, { error: "invalid_format" })
@@ -144,21 +105,17 @@ export const generatorSchema = z.object({
 });
 
 export const earlyStopperSchema = z.object({
-  num_samples: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(1, { error: "too_small" }))
-    .pipe(numberToString),
-  patience: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(1, { error: "too_small" }))
-    .pipe(numberToString),
+  num_samples: z.int({ error: "invalid_type" }).min(1, { error: "too_small" }),
+  patience: z.int({ error: "invalid_type" }).min(1, { error: "too_small" }),
 });
 
 export const runnerSchema = z.object({
-  num_iterations: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(1, { error: "too_small" }))
-    .pipe(numberToString),
-  num_sequences: stringToNumber
-    .pipe(z.int({ error: "invalid_type" }).min(1, { error: "too_small" }))
-    .pipe(numberToString),
+  num_iterations: z
+    .int({ error: "invalid_type" })
+    .min(1, { error: "too_small" }),
+  num_sequences: z
+    .int({ error: "invalid_type" })
+    .min(1, { error: "too_small" }),
 });
 
 export const configSchema = z.object({

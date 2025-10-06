@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { Status } from "@prisma/client";
 
 const bodySchema = z.object({
-  status: z.enum(Status),
+  status: z.nativeEnum(Status),
 });
 
 export const PATCH = async (
@@ -37,7 +37,6 @@ export const PATCH = async (
 
     return NextResponse.json(task, { status: 200 });
   } catch (error) {
-    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json({ errors: error.issues }, { status: 422 });
     }

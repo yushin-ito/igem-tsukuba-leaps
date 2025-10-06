@@ -92,42 +92,19 @@
       }
     },
     "step1": {
-      "title": "Step1. Disclose Infomation",
-      "description": "To prevent unintended use of LEAPS, we ask for disclosure of information.",
-      "question": {
-        "title": "Questions",
-        "description": "This form asks whether the amino acid sequence you submit is derived from toxic or pathogenic sources.",
-        "items": {
-          "toxin": "Is the amino acid sequence you will submit derived, in whole or in part, from a toxin?",
-          "pathogen": "Is the amino acid sequence you will submit derived, in whole or in part, from any of the pathogens listed <link>here</link>?",
-          "virus": "Is the amino acid sequence you will submit derived from a virus that is replication-competent and/or infectious, or otherwise capable of replicating within a host on its own?"
-        },
-        "yes": "Yes",
-        "no": "No",
-        "required": "Must be selected."
+      "title": "Step1. Biosafety Form",
+      "description": "Answer all all questions to help prevent misuse of LEAPS.",
+      "questions": {
+        "toxin": "Is the amino acid sequence you will submit derived, in whole or in part, from a toxin?",
+        "pathogen": "Is the amino acid sequence you will submit derived, in whole or in part, from any of the pathogens listed <link>here</link>?",
+        "virus": "Is the amino acid sequence you will submit derived from a virus that is replication-competent and/or infectious, or otherwise capable of replicating within a host on its own?"
       },
-      "consent": {
-        "title": "Consent",
-        "description": "This form confirms the consents required for using LEAPS. If you agree to all items.",
-        "items": {
-          "compliance": {
-            "title": "I agree to legal compliance",
-            "description": "The synthesis and use of proteins related to toxicity or pathogenicity will comply with the laws of the jurisdiction where the work is conducted and the appropriate laboratory biosafety level."
-          },
-          "disclaimer": {
-            "title": "I agree to the disclaimer",
-            "description": "iGEM TSUKUBA will not be liable for any losses or disadvantages resulting from the synthesis of such proteins."
-          },
-          "warranty": {
-            "title": "I agree to the no-warranty terms",
-            "description": "LEAPS is a research support tool for goal-directed functional modification and does not guarantee any output, regardless of what sequences are produced."
-          }
-        },
-        "required": "Must be agreed."
-      }
+      "yes": "Yes",
+      "no": "No",
+      "required": "Must be selected."
     },
     "step2": {
-      "title": "step2. Upload Dataset",
+      "title": "Step2. Upload Dataset",
       "description": "Upload a CSV file containing proteins and experimental values for each protein.",
       "header": {
         "too_few": "Must be at least 1 column.",
@@ -170,7 +147,7 @@
       "search_sequence": "Search Sequence"
     },
     "step3": {
-      "title": "step3. Configure Optimization",
+      "title": "Step3. Optimization Settings",
       "description": "Set the optimization direction for each experimental value.",
       "direction": "Direction",
       "max": "Max: {value}",
@@ -183,17 +160,18 @@
       "lower": "Lower",
       "upper": "Upper",
       "invalid_type": "Must be a number.",
-      "invalid_range": "Lower must be less than Upper."
+      "invalid_range": "Lower must be less than Upper.",
+      "error": "Something went wrong."
     },
     "step4": {
-      "title": "step4. Advanced Settings",
+      "title": "Step4. Advanced Settings",
       "description": "Change the settings of each module. This step is optional.",
       "configure": "Configure",
       "sampler": {
         "title": "Sampler",
         "description": "Sampler is a module that samples proteins.",
-        "num_shuffles": {
-          "title": "Number of Shuffles",
+        "num_sequences": {
+          "title": "Number of Sequences",
           "description": "",
           "invalid_type": "Must be an integer.",
           "too_small": "Must be at least 1."
@@ -216,20 +194,8 @@
       "predictor": {
         "title": "Predictor",
         "description": "Predictor is a module that predicts the functional values of proteins.",
-        "destruct_per_samples": {
-          "title": "Number of Proteins to Destruct",
-          "description": "",
-          "invalid_type": "Must be an integer.",
-          "too_small": "Must be at least 1."
-        },
         "num_destructions": {
           "title": "Number of Amino Acid to Destruct",
-          "description": "",
-          "invalid_type": "Must be an integer.",
-          "too_small": "Must be at least 1."
-        },
-        "mutate_per_samples": {
-          "title": "Number of Proteins to Mutate",
           "description": "",
           "invalid_type": "Must be an integer.",
           "too_small": "Must be at least 1."

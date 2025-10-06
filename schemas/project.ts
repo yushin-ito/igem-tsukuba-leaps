@@ -22,17 +22,10 @@ export const pathogenSchema = z.object({
   name: z.string().min(1),
 });
 
-export const confirmSchema = z.object({
-  question: z.object({
-    toxin: z.enum(["yes", "no"], { error: "required" }),
-    pathogen: z.enum(["yes", "no"], { error: "required" }),
-    virus: z.enum(["yes", "no"], { error: "required" }),
-  }),
-  consent: z.object({
-    compliance: z.literal(true, { error: "required" }),
-    disclaimer: z.literal(true, { error: "required" }),
-    warranty: z.literal(true, { error: "required" }),
-  }),
+export const biosafetySchema = z.object({
+  toxin: z.enum(["yes", "no"], { error: "required" }),
+  pathogen: z.enum(["yes", "no"], { error: "required" }),
+  virus: z.enum(["yes", "no"], { error: "required" }),
 });
 
 export const datasetSchema = z
@@ -96,7 +89,7 @@ export const datasetSchema = z
   );
 
 export const projectSchema = z.object({
-  confirm: confirmSchema,
-  text: datasetSchema,
+  biosafety: biosafetySchema,
+  dataset: datasetSchema,
   config: configSchema,
 });

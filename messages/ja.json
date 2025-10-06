@@ -92,46 +92,23 @@
       }
     },
     "step1": {
-      "title": "Step1. 情報の開示",
-      "description": "我々の意図しないLEAPSの使用を未然に防ぐため、情報の開示をお願いしています。",
-      "question": {
-        "title": "質問事項",
-        "description": "本フォームでは、入力アミノ酸配列が毒性や病原性に由来するかどうかを確認しています。",
-        "items": {
-          "toxin": "入力するアミノ酸配列は、毒素に（完全または部分的に）由来していますか？",
-          "pathogen": "入力するアミノ酸配列は、<link>こちら</link>の病原体に（完全または部分的に）由来していますか？",
-          "virus": "入力するアミノ酸配列は、複製能を持つ、および/または感染性のある形態のウイルス、あるいはそれ自体が宿主内で複製可能な形態のものに由来していますか？"
-        },
-        "yes": "はい",
-        "no": "いいえ",
-        "required": "選択してください。"
+      "title": "Step1. バイオセーフティの確認",
+      "description": "LEAPSの不適切な利用を防ぐため、すべての質問に回答してください。",
+      "questions": {
+        "toxin": "入力するアミノ酸配列は、毒素に（完全または部分的に）由来していますか？",
+        "pathogen": "入力するアミノ酸配列は、<link>こちら</link>の病原体に（完全または部分的に）由来していますか？",
+        "virus": "入力するアミノ酸配列は、複製能を持つ、および/または感染性のある形態のウイルス、あるいはそれ自体が宿主内で複製可能な形態のものに由来していますか？"
       },
-      "consent": {
-        "title": "同意事項",
-        "description": "本フォームでは、LEAPSの利用における同意事項を確認しています。",
-        "items": {
-          "compliance": {
-            "title": "法令について同意します",
-            "description": "毒性・病原性に関わるタンパク質の合成・使用は、実施地の法令および適切な実験室レベルに従います。"
-          },
-          "disclaimer": {
-            "title": "免責について同意します",
-            "description": "当該タンパク質の合成に起因するいかなる不利益についても iGEM TSUKUBAは責任を負いません。"
-          },
-          "warranty": {
-            "title": "保証について同意します",
-            "description": "LEAPSは指向的機能改変の研究支援ツールであり、どのような配列が出力されても、出力結果を保証しません。"
-          }
-        },
-        "required": "同意してください。"
-      }
+      "yes": "はい",
+      "no": "いいえ",
+      "required": "選択してください。"
     },
     "step2": {
-      "title": "Step2. データのアップロード",
+      "title": "Step2. データセットのアップロード",
       "description": "タンパク質と各タンパク質に対するラベルを含むCSVファイルをアップロードしてください。",
       "header": {
-        "too_few": "1列以上で入力してください。",
-        "too_many": "5列以下で入力してください。"
+        "too_few": "3列以上で入力してください。",
+        "too_many": "7列以下で入力してください。"
       },
       "row": {
         "too_few": "40行以上で入力してください。",
@@ -164,8 +141,8 @@
       "search_sequence": "タンパク質を検索"
     },
     "step3": {
-      "title": "Step3. 目標の設定",
-      "description": "各ラベルに対して、目標を設定してください。",
+      "title": "Step3. 最適化の設定",
+      "description": "各ラベルに対して、最適化の方向を設定してください。",
       "direction": "方向",
       "max": "最大値: {value}",
       "min": "最小値: {value}",
@@ -177,7 +154,8 @@
       "lower": "下限",
       "upper": "上限",
       "invalid_type": "数値で入力してください。",
-      "invalid_range": "下限は上限より小さくしてください。"
+      "invalid_range": "下限は上限より小さくしてください。",
+      "error": "正しい値を入力してください。"
     },
     "step4": {
       "title": "Step4. 高度な設定",
@@ -186,8 +164,8 @@
       "sampler": {
         "title": "Sampler",
         "description": "Samplerは、タンパク質をサンプリングするモジュールです。",
-        "num_shuffles": {
-          "title": "シャッフル数",
+        "num_sequences": {
+          "title": "サンプリングするタンパク質の数",
           "description": "",
           "invalid_type": "整数で入力してください。",
           "too_small": "1以上で入力してください。"
@@ -210,26 +188,14 @@
       "predictor": {
         "title": "Predictor",
         "description": "Predictorは、タンパク質の機能値を予測するモジュールです。",
-        "destruct_per_samples": {
+        "num_destructions": { 
           "title": "破壊するタンパク質の数",
           "description": "",
           "invalid_type": "整数で入力してください。",
           "too_small": "1以上で入力してください。"
         },
-        "num_destructions": { 
-          "title": "破壊するアミノ酸の数",
-          "description": "",
-          "invalid_type": "整数で入力してください。",
-          "too_small": "1以上で入力してください。"
-        },
-        "mutate_per_samples": {
-          "title": "変異させるタンパク質の数",
-          "description": "",
-          "invalid_type": "整数で入力してください。",
-          "too_small": "1以上で入力してください。"
-        },
         "num_mutations": {
-          "title": "変異させるアミノ酸の数",
+          "title": "変異させるタンパク質の数",
           "description": "",
           "invalid_type": "整数で入力してください。",
           "too_small": "1以上で入力してください。"

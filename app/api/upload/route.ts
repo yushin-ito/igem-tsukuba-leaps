@@ -13,22 +13,18 @@ export const POST = async (req: NextRequest) => {
     }
 
     const formData = await req.formData();
-    const files = formData.getAll("file") as File[];
+    const file = formData.get("file") as File;
 
-    if (files.length === 0) {
+    if (!file) {
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
 
-    const blobs = await Promise.all(
-      files.map((file) =>
-        put(file.name, file, {
-          access: "public",
-          allowOverwrite: true,
-        }),
-      ),
-    );
+    const blob = await put(file.name, file, {
+      access: "public",
+      allowOverwrite: true,
+    });
 
-    return NextResponse.json(blobs, { status: 200 });
+    return NextResponse.json(blob, { status: 200 });
   } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },

@@ -76,7 +76,7 @@ importers:
         version: 1.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.6
-        version: 0.13.6(typescript@5.8.3)(zod@4.1.11)
+        version: 0.13.6(typescript@5.8.3)(zod@3.25.76)
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -144,8 +144,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       zod:
-        specifier: ^4.1.11
-        version: 4.1.11
+        specifier: ^3.25.51
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -2804,8 +2804,8 @@ packages:
     resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
     engines: {node: '>=18'}
 
-  zod@4.1.11:
-    resolution: {integrity: sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -3934,17 +3934,17 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.6(typescript@5.8.3)(zod@4.1.11)':
+  '@t3-oss/env-core@0.13.6(typescript@5.8.3)(zod@3.25.76)':
     optionalDependencies:
       typescript: 5.8.3
-      zod: 4.1.11
+      zod: 3.25.76
 
-  '@t3-oss/env-nextjs@0.13.6(typescript@5.8.3)(zod@4.1.11)':
+  '@t3-oss/env-nextjs@0.13.6(typescript@5.8.3)(zod@3.25.76)':
     dependencies:
-      '@t3-oss/env-core': 0.13.6(typescript@5.8.3)(zod@4.1.11)
+      '@t3-oss/env-core': 0.13.6(typescript@5.8.3)(zod@3.25.76)
     optionalDependencies:
       typescript: 5.8.3
-      zod: 4.1.11
+      zod: 3.25.76
 
   '@tailwindcss/node@4.1.8':
     dependencies:
@@ -5495,6 +5495,6 @@ snapshots:
 
   yoctocolors@2.1.1: {}
 
-  zod@4.1.11: {}
+  zod@3.25.76: {}
 
   zwitch@2.0.4: {}

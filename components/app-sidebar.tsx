@@ -3,7 +3,6 @@
 import DeleteProjectDialog from "@/components/delete-project-dialog";
 import Icons from "@/components/icons";
 import NavUser from "@/components/nav-user";
-import RenameProjectDialog from "@/components/rename-project-dialog";
 import SearchProjectDialog from "@/components/search-project-dialog";
 import ShareProjectDialog from "@/components/share-project-dialog";
 import { buttonVariants } from "@/components/ui/button";
@@ -27,6 +26,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import UpdateProjectDialog from "@/components/update-project-dialog";
 import { useDialog } from "@/hooks/use-dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn, fetcher } from "@/lib/utils";
@@ -224,7 +224,7 @@ const AppSidebar = ({ user, projects }: AppSidebarProps) => {
         </SidebarFooter>
       </Sidebar>
       <SearchProjectDialog {...getDialogProps("search")} />
-      <RenameProjectDialog
+      <UpdateProjectDialog
         {...getDialogProps("rename")}
         projectId={state.type === "rename" ? state.data.projectId : ""}
         name={state.type === "rename" ? state.data.name : ""}

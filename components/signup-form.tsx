@@ -60,8 +60,10 @@ const SignupForm = () => {
               />
               {errors.email && (
                 <span className="px-1 text-destructive text-xs">
-                  {/* @ts-expect-error */}
-                  {t(errors.email.message)}
+                  {
+                    // @ts-expect-error
+                    t(errors.email.message)
+                  }
                 </span>
               )}
             </div>
