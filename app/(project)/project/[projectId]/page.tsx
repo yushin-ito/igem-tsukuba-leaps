@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { auth } from "@/auth";
+import Leaderboard from "@/components/leaderboard";
 import ProjectForm from "@/components/project-form";
 import StatusCard from "@/components/status-card";
 import { db } from "@/lib/db";
@@ -70,6 +71,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
       <div className="space-y-12">
         <ProjectForm project={project} tasks={tasks} pathogens={pathogens} />
         <StatusCard project={project} tasks={tasks} />
+        <Leaderboard project={project} tasks={tasks} />
       </div>
     </section>
   );

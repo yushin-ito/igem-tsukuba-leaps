@@ -1,9 +1,8 @@
 "use client";
 
 import AdvancedSettingsForm from "@/components/advanced-settings-form";
+import AssayTable from "@/components/assay-table";
 import InformationDisclosureForm from "@/components/biosafety-form";
-import DataTable from "@/components/data-table";
-import DataTableColumnHeader from "@/components/data-table-column-header";
 import DSVInput from "@/components/dsv-input";
 import Icons from "@/components/icons";
 import OptimizationSettingsForm from "@/components/optimization-settings-form";
@@ -19,11 +18,10 @@ import { Label } from "@/components/ui/label";
 import env from "@/env";
 import { fetcher, parseDSV } from "@/lib/utils";
 import { configSchema } from "@/schemas/config";
-import { projectSchema, tableSchema } from "@/schemas/project";
+import { projectSchema } from "@/schemas/project";
 import type { Pathogen } from "@/types";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { Project, Task } from "@prisma/client";
-import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { type ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -238,34 +236,6 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
     setValue("config.evaluator", evaluator);
   }, [headers, setValue]);
 
-  const records = useMemo(
-    () =>
-      rows.map((row) => {
-        const data: Record<string, string> = {};
-        for (const [index, header] of headers.entries()) {
-          data[header] = row[index] ?? "";
-        }
-        return data;
-      }),
-    [rows, headers],
-  );
-
-  const columns: ColumnDef<Record<string, string>>[] = useMemo(
-    () =>
-      headers.map((header, index) => ({
-        id: index.toString(),
-        accessorKey: header,
-        meta: { label: header },
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title={header} />
-        ),
-        cell: ({ getValue }) => (
-          <div className="px-4">{String(getValue())}</div>
-        ),
-      })),
-    [headers],
-  );
-
   const onUpload = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -377,9 +347,7 @@ const ProjectForm = ({ project, tasks, pathogens }: ProjectFormProps) => {
                   </div>
                 </div>
               </div>
-              {tableSchema.safeParse({ headers }).success && (
-                <DataTable columns={columns} data={records} />
-              )}
+              <AssayTable headers={headers} rows={rows} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3" className="space-y-4">

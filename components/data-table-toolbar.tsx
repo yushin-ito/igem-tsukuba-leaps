@@ -17,7 +17,7 @@ export interface DataTableToolbarProps<TData> {
 }
 
 const DataTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
-  const t = useTranslations("project.step2");
+  const t = useTranslations("project");
 
   return (
     <div className="flex items-center space-x-8">
@@ -25,8 +25,8 @@ const DataTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
         <Icons.search className="absolute left-2 size-4 text-muted-foreground" />
         <Input
           placeholder={t("search_sequence")}
-          value={table.getState().globalFilter ?? ""}
-          onChange={(e) => table.setGlobalFilter(e.target.value)}
+          value={table.getState().globalFilter}
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="pl-8"
         />
       </div>

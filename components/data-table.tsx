@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import {
   type ColumnDef,
-  type FilterFn,
+  type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
   flexRender,
@@ -23,7 +23,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,27 +34,16 @@ const DataTable = <TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
-  const t = useTranslations("project.step2");
+  const t = useTranslations("project");
 
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-
-  const globalFilterFn = useCallback<FilterFn<TData>>(
-    (row, _columnId, filterValue: string) => {
-      const cells = row.getVisibleCells();
-      const value = cells[1]?.getValue?.();
-      return String(value)
-        .toLowerCase()
-        .includes(String(filterValue).toLowerCase());
-    },
-    [],
-  );
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, globalFilter, columnVisibility },
+    state: { sorting, columnFilters, columnVisibility },
     initialState: {
       pagination: {
         pageIndex: 0,
@@ -63,12 +52,11 @@ const DataTable = <TData, TValue>({
     },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
-    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn,
   });
 
   return (
